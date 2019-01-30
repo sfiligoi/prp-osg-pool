@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: osg-wn-gpu-prp-sdsc
+  labels: 
+    k8s-app: osg-wn-gpu
+spec:
+  template:
+    metadata: 
+      labels:
+        k8s-app: osg-wn-gpu
+    spec:
+      nodeSelector: 
+        kubernetes.io/hostname: k8s-gpu-03.sdsc.optiputer.net
+      containers:
+      - name: osg-wn-gpu
+        image: sfiligoi/prp-osg-wn-gpu
+        imagePullPolicy: Always
+        #command: ["sh", "-c", "sleep infinity"]
+        resources:
+           limits:
+             nvidia.com/gpu: 1
+        volumeMounts:
+        - name: configpasswd
+          mountPath: /var/lock/condor/pool_password
+          subPath: pool_password
+          readOnly: true
+        - name: confighost
+          mountPath: /etc/condor/config.d/50_condor_host.config
+          subPath: 50_condor_host.config
+          readOnly: true
+      volumes:
+      - name: configpasswd
+        secret:
+          secretName: osg-wn-prp-sdsc-config
+          items:
+             - key: pool_password
+               path: pool_password
+          defaultMode: 256
+      - name: confighost
+        secret:
+          secretName: osg-wn-prp-sdsc-config
+          items:
+             - key: 50_condor_host.config
+               path: 50_condor_host.config
+          defaultMode: 292
+
