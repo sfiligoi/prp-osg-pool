@@ -12,6 +12,7 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-
 RUN yum clean all
 
 ADD 01_resource_limits.config /etc/condor/config.d/01_resource_limits.config
+ADD 97_procd_workaround.config /etc/condor/config.d/97_procd_workaround.config
 ADD 98_security.config /etc/condor/config.d/98_security.config
 ADD 99_daemons.config /etc/condor/config.d/99_daemons.config
 
