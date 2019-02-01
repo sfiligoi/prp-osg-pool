@@ -10,8 +10,6 @@ spec:
       labels:
         k8s-app: osg-wn-gpu
     spec:
-      nodeSelector: 
-        kubernetes.io/hostname: k8s-gpu-03.sdsc.optiputer.net
       containers:
       - name: osg-wn-gpu
         image: sfiligoi/prp-osg-wn-gpu
