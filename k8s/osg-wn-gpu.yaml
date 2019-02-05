@@ -18,6 +18,11 @@ spec:
         resources:
            limits:
              nvidia.com/gpu: 1
+             memory: 6Gi
+           requests:
+             nvidia.com/gpu: 1
+             memory: 4Gi
+             cpu: 1
         volumeMounts:
         - name: configpasswd
           mountPath: /var/lock/condor/pool_password
@@ -26,6 +31,10 @@ spec:
         - name: confighost
           mountPath: /etc/condor/config.d/50_condor_host.config
           subPath: 50_condor_host.config
+          readOnly: true
+        - name: configmem
+          mountPath: /etc/condor/config.d/02_memory_limits.config
+          subPath: 02_memory_limits.config
           readOnly: true
       volumes:
       - name: configpasswd
@@ -41,5 +50,12 @@ spec:
           items:
              - key: 50_condor_host.config
                path: 50_condor_host.config
+          defaultMode: 292
+      - name: configmem
+        secret:
+          secretName: osg-wn-prp-sdsc-config
+          items:
+             - key: 02_memory_limits.config
+               path: 02_memory_limits.config
           defaultMode: 292
 
