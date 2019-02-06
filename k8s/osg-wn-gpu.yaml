@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: osg-wn-gpu
-        image: sfiligoi/prp-osg-wn-gpu
+        image: sfiligoi/prp-osg-wn-gpu:wn-gpu
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"]
         resources:
