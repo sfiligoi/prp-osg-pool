@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: osg-collector-prp-sdsc
+  namespace: osg
+  labels:
+    k8s-app: osg-collector-prp
+spec:
+      nodeSelector: 
+        kubernetes.io/hostname: xcache-11.t2.ucsd.edu
+      containers:
+      - name: osg-collector-prp
+        image: sfiligoi/prp-osg-wn-gpu:collector
+        imagePullPolicy: Always
+        #command: ["sh", "-c", "sleep infinity"]
+        ports:
+        - containerPort: 9618
+        volumeMounts:
+        - name: condordata
+          mountPath: /var/lib/condor
+        - name: configpasswd
+          mountPath: /var/lock/condor/pool_password
+          subPath: pool_password
+          readOnly: true
+      volumes:
+      - name: condordata
+        hostPath:
+          path: /var/run/condor-collector-prp
+          type: Directory
+      - name: configpasswd
+        secret:
+          secretName: osg-collector-sdsc-config
+          items:
+             - key: pool_password
+               path: pool_password
+          defaultMode: 256
+

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: osg-collector-prp
+  name: osg-collector-prp
+  namespace: osg
+spec:
+  ports:
+  - port: 9618
+    protocol: TCP
+    targetPort: 9618
+  selector:
+    k8s-app: osg-collector-prp
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
