@@ -10,7 +10,7 @@ spec:
         kubernetes.io/hostname: xcache-11.t2.ucsd.edu
       containers:
       - name: osg-collector-prp
-        image: sfiligoi/prp-osg-wn-gpu:collector
+        image: sfiligoi/prp-osg-pool:collector
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"]
         ports:
