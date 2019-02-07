@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: osg-collector-prp
+spec:
+  type: ExternalName
+  externalName: osg-collector-prp.osg.svc.cluster.local
+  ports:
+  - port: 9618
+
