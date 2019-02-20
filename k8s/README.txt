@@ -4,6 +4,9 @@ This directory contains the files to start the HTCondor pool on the PRP k8s clus
 
 The order of instantiation is:
 
+# Make sure the CVMFS CSI plugins are set up
+# See prp-osg-cvmfs
+
 # Create pool password file per HTCondor documentation
 # Note: Do not check this file into git, as it is the base of the Condor security
 cat > pool_password
