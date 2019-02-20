@@ -2,6 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: osg-wn-gpu-prp-sdsc
+  namespace: osggpus
   labels: 
     k8s-app: osg-wn-gpu
 spec:
@@ -36,6 +37,18 @@ spec:
           mountPath: /etc/condor/config.d/02_memory_limits.config
           subPath: 02_memory_limits.config
           readOnly: true
+        - name: cvmfs-config-osg
+          mountPath: /cvmfs/config-osg.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-oasis
+          mountPath: /cvmfs/oasis.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-icecube
+          mountPath: /cvmfs/icecube.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-stash
+          mountPath: /cvmfs/stash.osgstorage.org
+          readOnly: true
       volumes:
       - name: configpasswd
         secret:
@@ -58,4 +71,20 @@ spec:
              - key: 02_memory_limits.config
                path: 02_memory_limits.config
           defaultMode: 292
+      - name: cvmfs-config-osg
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-config-osg
+          readOnly: true
+      - name: cvmfs-oasis
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-oasis
+          readOnly: true
+      - name: cvmfs-icecube
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-icecube
+          readOnly: true
+      - name: cvmfs-stash
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-stash
+          readOnly: true
 
