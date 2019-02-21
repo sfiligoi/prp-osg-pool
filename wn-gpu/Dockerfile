@@ -1,5 +1,8 @@
 FROM nvidia/cuda:10.0-runtime-centos7
 
+# Needed to get the recently deprecated libcudart.so symlink in place
+RUN yum -y install cuda-cudart-dev-10-0-10.0.130-1.x86_64
+
 RUN yum -y install https://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-latest.rpm && \
     yum -y install epel-release \
                    yum-plugin-priorities && \
@@ -10,6 +13,9 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-
     yum -y install supervisor
 
 RUN yum clean all
+
+# Condor does not pick up the system libraries
+ADD cudalib.sh /etc/profile.d/
 
 ADD 01_resource_limits.config /etc/condor/config.d/01_resource_limits.config
 ADD 97_procd_workaround.config /etc/condor/config.d/97_procd_workaround.config
