@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: osg-wn-gpu-prp-sdsc
+  name: osg-wn-gpu
   namespace: osggpus
   labels: 
     k8s-app: osg-wn-gpu
@@ -37,6 +37,9 @@ spec:
           mountPath: /etc/condor/config.d/02_memory_limits.config
           subPath: 02_memory_limits.config
           readOnly: true
+        - name: configgpu
+          mountPath: /etc/condor/config.d/30_gpu.config
+          subPath: 30_gpu.config
         - name: cvmfs-config-osg
           mountPath: /cvmfs/config-osg.opensciencegrid.org
           readOnly: true
@@ -70,6 +73,13 @@ spec:
           items:
              - key: 02_memory_limits.config
                path: 02_memory_limits.config
+          defaultMode: 292
+      - name: configgpu
+        secret:
+          secretName: osg-wn-prp-sdsc-config
+          items:
+             - key: 30_gpu.config
+               path: 30_gpu.config
           defaultMode: 292
       - name: cvmfs-config-osg
         persistentVolumeClaim:
