@@ -12,7 +12,10 @@ The order of instantiation is:
 cat > pool_password
 
 # create the k8s secrets
-make
+make secret_pool
+
+# create the configmaps
+make configmap
 
 # Start the collector pod
 # The namespace is hardcoded to osg
