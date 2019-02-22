@@ -1,20 +1,21 @@
+#
+# These worker nodes will not be prempted, use with care
+#
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: osg-wn-gpu
+  name: osg-wn-gpu-prio
   namespace: osggpus
   labels: 
-    k8s-app: osg-wn-gpu
+    k8s-app: osg-wn-gpu-prio
 spec:
-  replicas: 10
   template:
     metadata: 
       labels:
-        k8s-app: osg-wn-gpu
+        k8s-app: osg-wn-gpu-prio
     spec:
-      priorityClassName: nice
       containers:
-      - name: osg-wn-gpu
+      - name: osg-wn-gpu-prio
         image: sfiligoi/prp-osg-pool:wn-gpu
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"]
@@ -40,9 +41,6 @@ spec:
         - name: configgpu
           mountPath: /etc/condor/config.d/30_gpu.config
           subPath: 30_gpu.config
-        - name: confignice
-          mountPath: /etc/condor/config.d/51_rank_nice.config
-          subPath: 51_rank_nice.config
         - name: cvmfs-config-osg
           mountPath: /cvmfs/config-osg.opensciencegrid.org
           readOnly: true
@@ -81,12 +79,6 @@ spec:
           items:
              - key: 30_gpu.config
                path: 30_gpu.config
-      - name: confignice
-        configMap:
-          name: osg-wn-prp-opt-config
-          items:
-             - key: 51_rank_nice.config
-               path: 51_rank_nice.config
       - name: cvmfs-config-osg
         persistentVolumeClaim:
           claimName: csi-cvmfs-pvc-config-osg

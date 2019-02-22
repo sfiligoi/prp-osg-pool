@@ -21,4 +21,6 @@ configmap_gpu:
 
 configmap_opt:
 	-kubectl delete configmap osg-wn-prp-opt-config -n osggpus
-	kubectl create configmap osg-wn-prp-opt-config -n osggpus --from-file=51_rank_opportunistic.config=wn-gpu.d/51_rank_opportunistic.config
+	kubectl create configmap osg-wn-prp-opt-config -n osggpus \
+             --from-file=51_rank_opportunistic.config=wn-gpu.d/51_rank_opportunistic.config \
+             --from-file=51_rank_nice.config=wn-gpu.d/51_rank_nice.config
