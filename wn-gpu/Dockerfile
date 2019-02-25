@@ -12,6 +12,12 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-
     yum -y install condor && \
     yum -y install supervisor
 
+# Suggested RPMs from https://hub.docker.com/r/opensciencegrid/osgvo-el7/dockerfile
+RUN yum -y groupinstall "Compatibility Libraries" \
+                        "Development Tools" \
+                        "Scientific Support"
+
+
 RUN yum clean all
 
 # Condor does not pick up the system libraries
