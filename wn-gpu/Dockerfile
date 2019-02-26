@@ -3,6 +3,7 @@ FROM nvidia/cuda:10.0-runtime-centos7
 # Needed to get the recently deprecated libcudart.so symlink in place
 RUN yum -y install cuda-cudart-dev-10-0-10.0.130-1.x86_64
 
+# OSG RPMs
 RUN yum -y install https://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-latest.rpm && \
     yum -y install epel-release \
                    yum-plugin-priorities && \
@@ -11,6 +12,14 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-
                    redhat-lsb-core && \
     yum -y install condor && \
     yum -y install supervisor
+
+# Enable OpenCL
+# As suggested by https://github.com/WIPACrepo/pyglidein/blob/master/Dockerfile
+RUN mkdir -p /etc/OpenCL/vendors && \
+    echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+
+# Some helper OpenCL tools
+RUN yum install -y clinfo
 
 # Suggested RPMs from https://hub.docker.com/r/opensciencegrid/osgvo-el7/dockerfile
 RUN yum -y groupinstall "Compatibility Libraries" \
