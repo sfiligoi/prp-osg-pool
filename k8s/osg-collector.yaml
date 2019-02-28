@@ -29,9 +29,8 @@ spec:
           readOnly: true
       volumes:
       - name: condordata
-        hostPath:
-          path: /var/run/condor-collector-prp
-          type: Directory
+        persistentVolumeClaim:
+          claimName: pvc-xcache11-t2-ucsd-edu-persistent-1
       - name: configpasswd
         secret:
           secretName: osg-pool-sdsc-config
