@@ -41,7 +41,6 @@ ADD 99_daemons.config /etc/condor/config.d/99_daemons.config
 ADD sbin/* /usr/local/sbin/
 
 ADD supervisord.conf /etc/
-ADD supervisord.d/* /etc/supervisord.d/
 RUN mkdir -p /var/log/supervisor
 
 CMD ["/usr/local/sbin/supervisord_startup.sh"]
