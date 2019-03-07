@@ -6,7 +6,7 @@ metadata:
   labels: 
     k8s-app: osg-wn-gpu
 spec:
-  replicas: 10
+  replicas: 1
   template:
     metadata: 
       labels:
@@ -43,6 +43,9 @@ spec:
         - name: confignice
           mountPath: /etc/condor/config.d/51_rank_nice.config
           subPath: 51_rank_nice.config
+        - name: configusers
+          mountPath: /usr/local/sbin/add_image_users.sh
+          subPath: add_image_users.sh
         - name: cvmfs-config-osg
           mountPath: /cvmfs/config-osg.opensciencegrid.org
           readOnly: true
@@ -90,6 +93,12 @@ spec:
           items:
              - key: 51_rank_nice.config
                path: 51_rank_nice.config
+      - name: configusers
+        configMap:
+          name: osg-wn-prp-config
+          items:
+             - key: add_image_users.sh
+               path: add_image_users.sh
       - name: cvmfs-config-osg
         persistentVolumeClaim:
           claimName: csi-cvmfs-pvc-config-osg

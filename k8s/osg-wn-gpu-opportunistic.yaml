@@ -3,12 +3,12 @@ kind: Deployment
 metadata:
   name: osg-wn-gpu-opt
   namespace: osggpus
-  labels:
+  labels: 
     k8s-app: osg-wn-gpu-opt
 spec:
-  replicas: 50
+  replicas: 1
   template:
-    metadata:
+    metadata: 
       labels:
         k8s-app: osg-wn-gpu-opt
     spec:
@@ -43,11 +43,17 @@ spec:
         - name: configopt
           mountPath: /etc/condor/config.d/51_rank_opportunistic.config
           subPath: 51_rank_opportunistic.config
+        - name: configusers
+          mountPath: /usr/local/sbin/add_image_users.sh
+          subPath: add_image_users.sh
         - name: cvmfs-config-osg
           mountPath: /cvmfs/config-osg.opensciencegrid.org
           readOnly: true
         - name: cvmfs-oasis
           mountPath: /cvmfs/oasis.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-connect
+          mountPath: /cvmfs/connect.opensciencegrid.org
           readOnly: true
         - name: cvmfs-icecube
           mountPath: /cvmfs/icecube.opensciencegrid.org
@@ -87,6 +93,12 @@ spec:
           items:
              - key: 51_rank_opportunistic.config
                path: 51_rank_opportunistic.config
+      - name: configusers
+        configMap:
+          name: osg-wn-prp-config
+          items:
+             - key: add_image_users.sh
+               path: add_image_users.sh
       - name: cvmfs-config-osg
         persistentVolumeClaim:
           claimName: csi-cvmfs-pvc-config-osg
@@ -94,6 +106,10 @@ spec:
       - name: cvmfs-oasis
         persistentVolumeClaim:
           claimName: csi-cvmfs-pvc-oasis
+          readOnly: true
+      - name: cvmfs-connect
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-connect
           readOnly: true
       - name: cvmfs-icecube
         persistentVolumeClaim:
