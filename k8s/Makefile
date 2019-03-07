@@ -13,7 +13,8 @@ configmap: configmap_base configmap_gpu configmap_opt
 configmap_base:
 	-kubectl delete configmap osg-wn-prp-config -n osggpus
 	kubectl create configmap  osg-wn-prp-config -n osggpus \
-             --from-file=50_condor_host.config=wn-gpu.d/50_condor_host.config --from-file=02_memory_limits.config=wn-gpu.d/02_memory_limits.config
+             --from-file=50_condor_host.config=wn-gpu.d/50_condor_host.config --from-file=02_memory_limits.config=wn-gpu.d/02_memory_limits.config \
+             --from-file=add_image_users.sh=wn-gpu.d/add_image_users.sh
 
 configmap_gpu:
 	-kubectl delete configmap osg-wn-prp-gpu-config -n osggpus
