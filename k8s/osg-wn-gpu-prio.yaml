@@ -47,6 +47,9 @@ spec:
         - name: cvmfs-oasis
           mountPath: /cvmfs/oasis.opensciencegrid.org
           readOnly: true
+        - name: cvmfs-connect
+          mountPath: /cvmfs/connect.opensciencegrid.org
+          readOnly: true
         - name: cvmfs-icecube
           mountPath: /cvmfs/icecube.opensciencegrid.org
           readOnly: true
@@ -86,6 +89,10 @@ spec:
       - name: cvmfs-oasis
         persistentVolumeClaim:
           claimName: csi-cvmfs-pvc-oasis
+          readOnly: true
+      - name: cvmfs-connect
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-connect
           readOnly: true
       - name: cvmfs-icecube
         persistentVolumeClaim:
