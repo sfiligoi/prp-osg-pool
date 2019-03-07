@@ -1,0 +1,21 @@
+apiVersion: settings.k8s.io/v1alpha1
+kind: PodPreset
+metadata:
+  name: osg-wn-users
+  namespace: osggpus
+spec:
+  selector:
+    matchLabels:
+      role: osg-wn
+  volumeMounts:
+    - name: confighost
+      mountPath: /usr/local/sbin/add_image_users.sh
+      subPath: add_image_users.sh
+  volumes:
+    - name: configusers
+      configMap:
+        name: osg-wn-prp-users
+        items:
+           - key: add_image_users.sh
+             path: add_image_users.sh
+
