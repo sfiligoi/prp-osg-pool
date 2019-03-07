@@ -37,8 +37,12 @@ ADD 97_procd_workaround.config /etc/condor/config.d/97_procd_workaround.config
 ADD 98_security.config /etc/condor/config.d/98_security.config
 ADD 99_daemons.config /etc/condor/config.d/99_daemons.config
 
-RUN mkdir -p /var/log/supervisor
-ADD supervisord.conf /etc/supervisord.conf
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+ADD sbin/* /usr/local/sbin/
+
+ADD supervisord.conf /etc/
+ADD supervisord.d/* /etc/supervisord.d/
+RUN mkdir -p /var/log/supervisor
+
+CMD ["/usr/local/sbin/supervisord_startup.sh"]
 
