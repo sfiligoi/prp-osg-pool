@@ -1,4 +1,8 @@
 #!/bin/bash
 
-# The frontier setup generates the actual squid setup as a post-config step
+
+# Users expect a working OpenCL setup, so fail if it is not there
+source /usr/local/sbin/validate_opencl.sh
+
+# Condor needs the proper users in place
 source /usr/local/sbin/add_image_users.sh
