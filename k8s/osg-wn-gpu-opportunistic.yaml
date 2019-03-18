@@ -21,10 +21,10 @@ spec:
         resources:
            limits:
              nvidia.com/gpu: 1
-             memory: 6Gi
+             memory: 20Gi
            requests:
              nvidia.com/gpu: 1
-             memory: 4Gi
+             memory: 12Gi
              cpu: 1
         volumeMounts:
         - name: configpasswd
