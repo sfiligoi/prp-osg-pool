@@ -13,6 +13,15 @@ spec:
         k8s-app: osg-wn-gpu
     spec:
       priorityClassName: nice
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - k8s-ravi-01.calit2.optiputer.net
       containers:
       - name: osg-wn-gpu
         image: sfiligoi/prp-osg-pool:wn-gpu
