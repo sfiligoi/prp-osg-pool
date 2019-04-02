@@ -32,10 +32,11 @@ RUN yum clean all
 # Condor does not pick up the system libraries
 ADD wn-gpu/cudalib.sh /etc/profile.d/
 
-ADD 01_resource_limits.config /etc/condor/config.d/01_resource_limits.config
-ADD 97_procd_workaround.config /etc/condor/config.d/97_procd_workaround.config
-ADD 98_security.config /etc/condor/config.d/98_security.config
-ADD 99_daemons.config /etc/condor/config.d/99_daemons.config
+ADD 01_resource_limits.config /etc/condor/config.d/
+ADD 97_procd_workaround.config /etc/condor/config.d/
+ADD 98_security.config /etc/condor/config.d/
+ADD 99_daemons.config /etc/condor/config.d/
+ADD wn-gpu/02_gpu_jobs.config /etc/condor/config.d/
 
 ADD sbin/* /usr/local/sbin/
 
