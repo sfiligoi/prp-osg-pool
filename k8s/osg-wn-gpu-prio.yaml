@@ -35,7 +35,7 @@ spec:
              memory: 20Gi
            requests:
              nvidia.com/gpu: 1
-             memory: 12Gi
+             memory: 17Gi
              cpu: 1
         volumeMounts:
         - name: configpasswd
