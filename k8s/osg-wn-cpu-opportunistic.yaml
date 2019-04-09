@@ -45,8 +45,8 @@ spec:
           mountPath: /etc/condor/config.d/50_condor_host.config
           subPath: 50_condor_host.config
         - name: configmem
-          mountPath: /etc/condor/config.d/02_memory_limits_4g.config
-          subPath: 02_memory_limits_4g.config
+          mountPath: /etc/condor/config.d/02_memory_limits_20g.config
+          subPath: 02_memory_limits_20g.config
         - name: configusers
           mountPath: /usr/local/sbin/add_image_users.sh
           subPath: add_image_users.sh
@@ -83,8 +83,8 @@ spec:
         configMap:
           name: osg-wn-prp-cpu-config
           items:
-             - key: 02_memory_limits_4g.config
-               path: 02_memory_limits_4g.config
+             - key: 02_memory_limits_20g.config
+               path: 02_memory_limits_20g.config
       - name: configusers
         configMap:
           name: osg-wn-prp-config

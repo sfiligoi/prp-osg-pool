@@ -22,7 +22,7 @@ configmap_gpu:
 
 configmap_wn_cpu:
 	-kubectl delete configmap osg-wn-prp-cpu-config -n osggpus
-	kubectl create configmap osg-wn-prp-cpu-config -n osggpus --from-file=02_memory_limits_4g.config=wn-cpu.d/02_memory_limits_4g.config
+	kubectl create configmap osg-wn-prp-cpu-config -n osggpus --from-file=02_memory_limits_20g.config=wn-cpu.d/02_memory_limits_20g.config
 
 
 configmap_opt:
