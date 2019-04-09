@@ -4,17 +4,18 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: osg-wn-cpu-prio
+  name: osg-wn-cpu-opt
   namespace: osggpus
   labels: 
-    k8s-app: osg-wn-cpu-prio
+    k8s-app: osg-wn-cpu-opt
 spec:
   replicas: 1
   template:
     metadata: 
       labels:
-        k8s-app: osg-wn-cpu-prio
+        k8s-app: osg-wn-cpu-opt
     spec:
+      priorityClassName: opportunistic
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -25,7 +26,7 @@ spec:
                 values:
                 - production
       containers:
-      - name: osg-wn-cpu-prio
+      - name: osg-wn-cpu-opt
         image: sfiligoi/prp-osg-pool:wn-cpu
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"]
@@ -33,7 +34,7 @@ spec:
            limits:
              memory: 26Gi
            requests:
-             memory: 21Gi
+             memory: 20Gi
              cpu: 10
         volumeMounts:
         - name: configpasswd
