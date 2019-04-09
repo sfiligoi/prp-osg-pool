@@ -5,7 +5,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: osg-wn-cpu-prio
-  namespace: osggpus
+  namespace: osgcpus
   labels: 
     k8s-app: osg-wn-cpu-prio
 spec:
