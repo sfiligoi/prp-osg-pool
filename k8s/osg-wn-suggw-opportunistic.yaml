@@ -1,0 +1,114 @@
+#
+# These worker nodes will not be prempted, use with care
+#
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: osg-wn-suggw-opt
+  namespace: osgcpus
+  labels: 
+    k8s-app: osg-wn-suggw-opt
+spec:
+  replicas: 1
+  template:
+    metadata: 
+      labels:
+        k8s-app: osg-wn-suggw-opt
+    spec:
+      priorityClassName: opportunistic
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: env
+                operator: In
+                values:
+                - production
+      containers:
+      - name: osg-wn-suggw-opt
+        image: sfiligoi/prp-osg-pool:wn-suggw
+        imagePullPolicy: Always
+        #command: ["sh", "-c", "sleep infinity"]
+        resources:
+           limits:
+             memory: 26Gi
+           requests:
+             memory: 20Gi
+             cpu: 10
+        volumeMounts:
+        - name: configpasswd
+          mountPath: /var/lock/condor/pool_password
+          subPath: pool_password
+          readOnly: true
+        - name: confighost
+          mountPath: /etc/condor/config.d/50_condor_host.config
+          subPath: 50_condor_host.config
+        - name: configmem
+          mountPath: /etc/condor/config.d/02_memory_limits_20g.config
+          subPath: 02_memory_limits_20g.config
+        - name: configusers
+          mountPath: /usr/local/sbin/add_image_users.sh
+          subPath: add_image_users.sh
+        - name: cvmfs-config-osg
+          mountPath: /cvmfs/config-osg.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-oasis
+          mountPath: /cvmfs/oasis.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-connect
+          mountPath: /cvmfs/connect.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-gwosc
+          mountPath: /cvmfs/gwosc.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-stash
+          mountPath: /cvmfs/stash.osgstorage.org
+          readOnly: true
+      volumes:
+      - name: configpasswd
+        secret:
+          secretName: osg-pool-sdsc-config
+          items:
+             - key: pool_password
+               path: pool_password
+          defaultMode: 256
+      - name: confighost
+        configMap:
+          name: osg-wn-prp-config
+          items:
+             - key: 50_condor_host.config
+               path: 50_condor_host.config
+      - name: configmem
+        configMap:
+          name: osg-wn-prp-cpu-config
+          items:
+             - key: 02_memory_limits_20g.config
+               path: 02_memory_limits_20g.config
+      - name: configusers
+        configMap:
+          name: osg-wn-prp-config
+          items:
+             - key: add_image_users.sh
+               path: add_image_users.sh
+      - name: cvmfs-config-osg
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-config-osg
+          readOnly: true
+      - name: cvmfs-oasis
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-oasis
+          readOnly: true
+      - name: cvmfs-connect
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-connect
+          readOnly: true
+      - name: cvmfs-gwosc
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-gwosc
+          readOnly: true
+      - name: cvmfs-stash
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-stash
+          readOnly: true
+
