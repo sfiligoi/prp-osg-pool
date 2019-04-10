@@ -4,16 +4,16 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: osg-wn-suggw-opt
+  name: osg-wn-sugwg-opt
   namespace: osgcpus
   labels: 
-    k8s-app: osg-wn-suggw-opt
+    k8s-app: osg-wn-sugwg-opt
 spec:
   replicas: 1
   template:
     metadata: 
       labels:
-        k8s-app: osg-wn-suggw-opt
+        k8s-app: osg-wn-sugwg-opt
     spec:
       priorityClassName: opportunistic
       affinity:
@@ -26,7 +26,7 @@ spec:
                 values:
                 - production
       containers:
-      - name: osg-wn-suggw-opt
+      - name: osg-wn-sugwg-opt
         image: sfiligoi/prp-osg-pool:wn-suggw
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"]
@@ -60,7 +60,7 @@ spec:
           mountPath: /cvmfs/connect.opensciencegrid.org
           readOnly: true
         - name: cvmfs-gwosc
-          mountPath: /cvmfs/gwosc.opensciencegrid.org
+          mountPath: /cvmfs/gwosc.osgstorage.org
           readOnly: true
         - name: cvmfs-stash
           mountPath: /cvmfs/stash.osgstorage.org
