@@ -27,7 +27,7 @@ spec:
                 - production
       containers:
       - name: osg-wn-sugwg-opt
-        image: sfiligoi/prp-osg-pool:wn-suggw
+        image: sfiligoi/prp-osg-pool:wn-sugwg
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"]
         resources:
