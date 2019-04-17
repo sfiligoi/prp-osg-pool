@@ -1,7 +1,5 @@
 FROM nvidia/cuda:10.0-runtime-centos7
 
-RUN yum update -y
-
 # Needed to get the recently deprecated libcudart.so symlink in place
 RUN yum -y install cuda-cudart-dev-10-0-10.0.130-1.x86_64
 
@@ -27,48 +25,6 @@ RUN yum install -y clinfo
 RUN yum -y groupinstall "Compatibility Libraries" \
                         "Development Tools" \
                         "Scientific Support"
-
-# LIGO required packages, may already be present
-RUN yum install -y vim \
-      git \
-      python-devel \
-      gsl-devel \
-      gcc-c++ \
-      make
-
-
-# RIFT LSCSoft and python dependencies
-RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
-    python get-pip.py && \
-    rm get-pip.py
-RUN pip --no-cache-dir install --ignore-installed -U setuptools \
-           pip \
-           cupy  \
-           h5py \
-           numba \
-           vegas \
-           corner \
-           scikit-learn \
-           healpy \
-           matplotlib \
-           lalsuite \
-           gwdatafind \
-           ligo-segments \
-           python-ligo-lw 
-#           ligo.skymap
-RUN CFLAGS='-std=c99' pip --no-cache-dir install -U gwsurrogate 
-
-# RIFT
-# Modules and scripts run directly from repository
-ENV RIFT_INSTALL_DIR /opt/lscsoft/rift
-ENV ILE_DIR ${RIFT_INSTALL_DIR}/MonteCarloMarginalizeCode/Code
-ENV PATH ${PATH}:${ILE_DIR}
-ENV PYTHONPATH ${PYTHONPATH}:${ILE_DIR}
-ENV GW_SURROGATE gwsurrogate
-RUN git clone https://git.ligo.org/richard-oshaughnessy/research-projects-RIT.git ${RIFT_INSTALL_DIR} \
-      && cd ${RIFT_INSTALL_DIR} \
-      && git checkout temp-RIT-Tides-port_master-GPUIntegration 
-
 
 
 RUN yum clean all
