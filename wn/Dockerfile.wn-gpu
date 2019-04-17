@@ -30,6 +30,8 @@ RUN yum -y groupinstall "Compatibility Libraries" \
 
 # pip and Condor does not pick up the system libraries
 ADD wn-gpu/cudalib.sh /etc/profile.d/
+RUN ln -s /usr/lib64/libcuda.so /usr/local/cuda/lib64/
+
 
 # LIGO required packages, may already be present
 RUN yum install -y vim \
