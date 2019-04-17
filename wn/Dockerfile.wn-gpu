@@ -28,6 +28,9 @@ RUN yum -y groupinstall "Compatibility Libraries" \
                         "Development Tools" \
                         "Scientific Support"
 
+# pip and Condor does not pick up the system libraries
+ADD wn-gpu/cudalib.sh /etc/profile.d/
+
 # LIGO required packages, may already be present
 RUN yum install -y vim \
       git \
@@ -61,23 +64,7 @@ RUN pip --no-cache-dir install --ignore-installed -U setuptools \
 #           ligo.skymap
 RUN CFLAGS='-std=c99' pip --no-cache-dir install -U gwsurrogate 
 
-# RIFT
-# Modules and scripts run directly from repository
-ENV RIFT_INSTALL_DIR /opt/lscsoft/rift
-ENV ILE_DIR ${RIFT_INSTALL_DIR}/MonteCarloMarginalizeCode/Code
-ENV PATH ${PATH}:${ILE_DIR}
-ENV PYTHONPATH ${PYTHONPATH}:${ILE_DIR}
-ENV GW_SURROGATE gwsurrogate
-RUN git clone https://git.ligo.org/richard-oshaughnessy/research-projects-RIT.git ${RIFT_INSTALL_DIR} \
-      && cd ${RIFT_INSTALL_DIR} \
-      && git checkout temp-RIT-Tides-port_master-GPUIntegration 
-
-
-
 RUN yum clean all
-
-# Condor does not pick up the system libraries
-ADD wn-gpu/cudalib.sh /etc/profile.d/
 
 ADD wn-gpu/01_resource_limits.config /etc/condor/config.d/
 ADD 97_procd_workaround.config /etc/condor/config.d/
