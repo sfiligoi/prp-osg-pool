@@ -31,6 +31,14 @@ RUN yum -y groupinstall "Compatibility Libraries" \
 # Condor does not pick up the system libraries
 ADD wn-gpu/cudalib.sh /etc/profile.d/
 
+# LIGO required packages, may already be present
+RUN yum install -y vim \
+      git \
+      python-devel \
+      gsl-devel \
+      gcc-c++ \
+      make
+
 # RIFT LSCSoft and python dependencies
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     python get-pip.py && \
