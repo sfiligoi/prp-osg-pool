@@ -1,5 +1,7 @@
 FROM nvidia/cuda:10.0-runtime-centos7
 
+RUN yum update -y
+
 # Needed to get the recently deprecated libcudart.so symlink in place
 RUN yum -y install cuda-cudart-dev-10-0-10.0.130-1.x86_64
 
@@ -26,11 +28,41 @@ RUN yum -y groupinstall "Compatibility Libraries" \
                         "Development Tools" \
                         "Scientific Support"
 
-
-RUN yum clean all
-
 # Condor does not pick up the system libraries
 ADD wn-gpu/cudalib.sh /etc/profile.d/
+
+# LIGO required packages, may already be present
+RUN yum install -y vim \
+      git \
+      python-devel \
+      gsl-devel \
+      gcc-c++ \
+      make
+
+# RIFT LSCSoft and python dependencies
+RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
+    python get-pip.py && \
+    rm -f get-pip.py
+RUN bash -c "pip --no-cache-dir install -vv --ignore-installed -U setuptools \
+           pip \
+           cupy-cuda100  \
+           h5py \
+           numba \
+           vegas \
+           corner \
+           scikit-learn \
+           healpy \
+           matplotlib \
+           lalsuite \
+           gwdatafind \
+           ligo-segments \
+           python-ligo-lw" 
+
+RUN CFLAGS='-std=c99' pip --no-cache-dir install -U gwsurrogate 
+
+RUN yum clean all
+# was a temp versions
+RUN rm -f /usr/lib64/libcuda.so /usr/local/cuda/lib64/libcuda.so
 
 ADD wn-gpu/01_resource_limits.config /etc/condor/config.d/
 ADD 97_procd_workaround.config /etc/condor/config.d/
