@@ -22,7 +22,7 @@ RUN yum -y install  \
     yum -y install supervisor
 
 # Some helper OpenCL tools
-#RUN yum install -y clinfo
+RUN yum install -y clinfo
 
 # Suggested RPMs from https://hub.docker.com/r/opensciencegrid/osgvo-el7/dockerfile
 RUN yum -y groupinstall "Compatibility Libraries" \
