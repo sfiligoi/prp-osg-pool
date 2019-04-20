@@ -4,18 +4,22 @@ FROM centos:centos7
 # OSG RPMs
 RUN yum -y install https://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-latest.rpm && \
     yum -y install epel-release \
-                   yum-plugin-priorities && \
-    yum -y install  \
-                   osg-wn-client \
-                   redhat-lsb-core && \
-    yum -y install condor && \
-    yum -y install supervisor
+                   yum-plugin-priorities
 
+# AMD ROCM
 RUN yum install -y dkms kernel-headers-`uname -r` kernel-devel-`uname -r`
 
 ADD rocm.repo /etc/yum.repos.d/rocm.repo
 
 RUN yum -y install rocm-dkms
+
+
+# OSG RPMs
+RUN yum -y install  \
+                   osg-wn-client \
+                   redhat-lsb-core && \
+    yum -y install condor && \
+    yum -y install supervisor
 
 # Some helper OpenCL tools
 #RUN yum install -y clinfo
