@@ -31,6 +31,9 @@ RUN yum -y groupinstall "Compatibility Libraries" \
 # Condor does not pick up the system libraries
 ADD wn-gpu/cudalib.sh /etc/profile.d/
 
+# At least one IceCube job types need freetype
+RUN yum install -y freetype
+
 # LIGO required packages, may already be present
 RUN yum install -y vim \
       git \
