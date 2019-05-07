@@ -12,6 +12,8 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-
     yum -y install condor && \
     yum -y install supervisor
 
+RUN yum -y update
+
 RUN yum clean all
 
 ADD wn-cpu/01_resource_limits.config /etc/condor/config.d/

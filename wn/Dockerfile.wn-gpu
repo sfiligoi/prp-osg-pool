@@ -42,6 +42,8 @@ RUN yum install -y vim \
       gcc-c++ \
       make
 
+RUN yum update -y
+
 # RIFT LSCSoft and python dependencies
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     python get-pip.py && \
