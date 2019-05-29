@@ -36,7 +36,6 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     rm -f get-pip.py
 RUN bash -c "pip --no-cache-dir install -vv --ignore-installed -U setuptools \
            pip \
-           cupy \
            h5py \
            numba \
            vegas \
