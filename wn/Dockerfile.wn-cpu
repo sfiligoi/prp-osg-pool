@@ -1,0 +1,72 @@
+FROM centos:centos7
+
+RUN yum update -y
+
+# OSG RPMs
+RUN yum -y install https://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-latest.rpm && \
+    yum -y install epel-release \
+                   yum-plugin-priorities && \
+    yum -y install  \
+                   osg-wn-client \
+                   redhat-lsb-core && \
+    yum -y install condor && \
+    yum -y install supervisor
+
+# Suggested RPMs from https://hub.docker.com/r/opensciencegrid/osgvo-el7/dockerfile
+RUN yum -y groupinstall "Compatibility Libraries" \
+                        "Development Tools" \
+                        "Scientific Support"
+
+# At least one IceCube job types need freetype
+RUN yum install -y freetype
+
+# LIGO required packages, may already be present
+RUN yum install -y vim \
+      git \
+      python-devel \
+      gsl-devel \
+      gcc-c++ \
+      make
+
+RUN yum update -y
+
+# RIFT LSCSoft and python dependencies
+RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
+    python get-pip.py && \
+    rm -f get-pip.py
+RUN bash -c "pip --no-cache-dir install -vv --ignore-installed -U setuptools \
+           pip \
+           cupy \
+           h5py \
+           numba \
+           vegas \
+           corner \
+           scikit-learn \
+           healpy \
+           matplotlib \
+           lalsuite \
+           gwdatafind \
+           ligo-segments \
+           python-ligo-lw" 
+
+RUN CFLAGS='-std=c99' pip --no-cache-dir install -U gwsurrogate 
+
+RUN yum clean all
+
+ADD wn-cpu/01_resource_limits.config /etc/condor/config.d/
+ADD 97_procd_workaround.config /etc/condor/config.d/
+ADD 98_security.config /etc/condor/config.d/
+ADD 99_daemons.config /etc/condor/config.d/
+ADD wn-cpu/02_cpu_jobs.config /etc/condor/config.d/
+
+ADD sbin/* /usr/local/sbin/
+
+ADD supervisord.conf /etc/
+RUN mkdir -p /var/log/supervisor
+
+RUN mkdir -p /etc/supervisord_startup/image-config.d
+ADD image-config.d/* /etc/supervisord_startup/image-config.d/
+
+
+CMD ["/usr/local/sbin/supervisord_startup.sh"]
+
