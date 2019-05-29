@@ -1,5 +1,5 @@
 #
-# These worker nodes will not be prempted, use with care
+# These worker nodes will be prempted, use with care
 #
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -16,15 +16,6 @@ spec:
         k8s-app: osg-wn-cpu-opt
     spec:
       priorityClassName: opportunistic
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: env
-                operator: In
-                values:
-                - production
       containers:
       - name: osg-wn-cpu-opt
         image: sfiligoi/prp-osg-pool:wn-cpu
@@ -33,9 +24,10 @@ spec:
         resources:
            limits:
              memory: 26Gi
+             cpu: 12
            requests:
              memory: 20Gi
-             cpu: 10
+             cpu: 8
         volumeMounts:
         - name: configpasswd
           mountPath: /var/lock/condor/pool_password
@@ -47,6 +39,9 @@ spec:
         - name: configmem
           mountPath: /etc/condor/config.d/02_memory_limits_20g.config
           subPath: 02_memory_limits_20g.config
+        - name: configic
+          mountPath: /etc/condor/config.d/09_icecube.config
+          subPath: 09_icecube.config
         - name: configusers
           mountPath: /usr/local/sbin/add_image_users.sh
           subPath: add_image_users.sh
@@ -85,6 +80,12 @@ spec:
           items:
              - key: 02_memory_limits_20g.config
                path: 02_memory_limits_20g.config
+      - name: configic
+        configMap:
+          name: osg-wn-prp-cpu-config
+          items:
+             - key: 09_icecube.config
+               path: 09_icecube.config
       - name: configusers
         configMap:
           name: osg-wn-prp-config

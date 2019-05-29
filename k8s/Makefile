@@ -24,11 +24,15 @@ configmap_base:
 
 configmap_gpu:
 	-kubectl delete configmap osg-wn-prp-gpu-config -n osggpus
-	kubectl create configmap osg-wn-prp-gpu-config -n osggpus --from-file=30_gpu.config=wn-gpu.d/30_gpu.config 
+	kubectl create configmap osg-wn-prp-gpu-config -n osggpus --from-file=30_gpu.config=wn-gpu.d/30_gpu.config \
+            --from-file=09_gpu_cpu.config=wn-gpu.d/09_gpu_cpu.config --from-file=09_gpu_cpu8.config=wn-gpu.d/09_gpu_cpu8.config
+	# kubectl create configmap osg-wn-prp-gpu-config -n osggpus --from-file=30_gpu.config=wn-gpu.d/30_gpu.config --from-file=09_gpu_cpu.config=wn-gpu.d/09_gpu_cpu.config --from-file=09_gpu_cpu8.config=wn-gpu.d/09_gpu_cpu8.config -o yaml --dry-run |kubectl replace -f -
 
 configmap_wn_cpu:
 	-kubectl delete configmap osg-wn-prp-cpu-config -n osgcpus
-	kubectl create configmap osg-wn-prp-cpu-config -n osgcpus --from-file=02_memory_limits_20g.config=wn-cpu.d/02_memory_limits_20g.config
+	kubectl create configmap osg-wn-prp-cpu-config -n osgcpus --from-file=02_memory_limits_20g.config=wn-cpu.d/02_memory_limits_20g.config \
+             --from-file=09_icecube.config=wn-cpu.d/09_icecube.config
+        # kubectl create configmap osg-wn-prp-cpu-config -n osgcpus --from-file=02_memory_limits_20g.config=wn-cpu.d/02_memory_limits_20g.config --from-file=09_icecube.config=wn-cpu.d/09_icecube.config  -o yaml --dry-run |kubectl replace -f -
 
 
 configmap_opt:
