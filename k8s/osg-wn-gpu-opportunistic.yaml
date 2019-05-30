@@ -12,7 +12,7 @@ spec:
       labels:
         k8s-app: osg-wn-gpu-opt
     spec:
-      priorityClassName: opportunistic
+      priorityClassName: opportunistic2
       nodeSelector:
         kubernetes.io/osg-gpu: good
       containers:
