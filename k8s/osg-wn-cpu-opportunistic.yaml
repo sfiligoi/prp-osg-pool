@@ -5,7 +5,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: osg-wn-cpu-opt
-  namespace: osgcpus
+  namespace: osggpus
   labels: 
     k8s-app: osg-wn-cpu-opt
 spec:
@@ -16,6 +16,17 @@ spec:
         k8s-app: osg-wn-cpu-opt
     spec:
       priorityClassName: opportunistic
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: env
+                operator: NotIn
+                values:
+                - osg
+                - I2
+                - suncave
       containers:
       - name: osg-wn-cpu-opt
         image: sfiligoi/prp-osg-pool:wn-cpu
