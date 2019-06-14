@@ -31,5 +31,5 @@ do
     fi
 done
 
-/cvmfs/oasis.opensciencegrid.org/mis/singularity/bin/singularity "${options[@]}"
+exec /cvmfs/oasis.opensciencegrid.org/mis/singularity/bin/singularity "${options[@]}"
 
