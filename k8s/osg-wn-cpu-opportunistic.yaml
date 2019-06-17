@@ -26,7 +26,6 @@ spec:
                 values:
                 - osg
                 - I2
-                - suncave
       containers:
       - name: osg-wn-cpu-opt
         image: sfiligoi/prp-osg-pool:wn-cpu
@@ -70,6 +69,9 @@ spec:
           readOnly: true
         - name: cvmfs-stash
           mountPath: /cvmfs/stash.osgstorage.org
+          readOnly: true
+        - name: cvmfs-sing
+          mountPath: /cvmfs/singularity.opensciencegrid.org
           readOnly: true
       volumes:
       - name: configpasswd
@@ -122,5 +124,9 @@ spec:
       - name: cvmfs-stash
         persistentVolumeClaim:
           claimName: csi-cvmfs-pvc-stash
+          readOnly: true
+      - name: cvmfs-sing
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-osg-singularity
           readOnly: true
 

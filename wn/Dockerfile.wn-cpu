@@ -12,45 +12,11 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-
     yum -y install condor && \
     yum -y install supervisor
 
-# Suggested RPMs from https://hub.docker.com/r/opensciencegrid/osgvo-el7/dockerfile
-RUN yum -y groupinstall "Compatibility Libraries" \
-                        "Development Tools" \
-                        "Scientific Support"
-
-# At least one IceCube job types need freetype
-RUN yum install -y freetype
-
-# LIGO required packages, may already be present
-RUN yum install -y vim \
-      git \
-      python-devel \
-      gsl-devel \
-      gcc-c++ \
-      make
-
-RUN yum update -y
-
-# RIFT LSCSoft and python dependencies
-RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
-    python get-pip.py && \
-    rm -f get-pip.py
-RUN bash -c "pip --no-cache-dir install -vv --ignore-installed -U setuptools \
-           pip \
-           h5py \
-           numba \
-           vegas \
-           corner \
-           scikit-learn \
-           healpy \
-           matplotlib \
-           lalsuite \
-           gwdatafind \
-           ligo-segments \
-           python-ligo-lw" 
-
-RUN CFLAGS='-std=c99' pip --no-cache-dir install -U gwsurrogate 
-
 RUN yum clean all
+
+# Rot-less singularity
+# Needs /cvmfs/oasis.opensciencegrid.org/mis/singularity/bin/singularity
+ADD singularity_npid.sh /usr/bin/singularity
 
 ADD wn-cpu/01_resource_limits.config /etc/condor/config.d/
 ADD 97_procd_workaround.config /etc/condor/config.d/
