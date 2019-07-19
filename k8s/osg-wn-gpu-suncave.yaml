@@ -1,0 +1,129 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: osg-wn-gpu-suncave
+  namespace: osggpus
+  labels: 
+    k8s-app: osg-wn-gpu-suncave
+spec:
+  replicas: 70
+  template:
+    metadata: 
+      labels:
+        k8s-app: osg-wn-gpu-suncave
+    spec:
+      priorityClassName: opportunistic2
+      tolerations:
+      - effect: NoSchedule
+        key: nautilus.io/suncave
+        operator: Exists
+      nodeSelector:
+        kubernetes.io/osg-gpu: good
+        env: suncave
+      containers:
+      - name: osg-wn-gpu
+        image: sfiligoi/prp-osg-pool:wn-gpu
+        imagePullPolicy: Always
+        #command: ["sh", "-c", "sleep infinity"]
+        resources:
+           limits:
+             nvidia.com/gpu: 1
+             memory: 20Gi
+           requests:
+             nvidia.com/gpu: 1
+             memory: 17Gi
+             cpu: 1
+        volumeMounts:
+        - name: configpasswd
+          mountPath: /var/lock/condor/pool_password
+          subPath: pool_password
+          readOnly: true
+        - name: confighost
+          mountPath: /etc/condor/config.d/50_condor_host.config
+          subPath: 50_condor_host.config
+        - name: configmem
+          mountPath: /etc/condor/config.d/02_memory_limits.config
+          subPath: 02_memory_limits.config
+        - name: configgpu
+          mountPath: /etc/condor/config.d/30_gpu.config
+          subPath: 30_gpu.config
+        - name: configopt
+          mountPath: /etc/condor/config.d/51_rank_opportunistic.config
+          subPath: 51_rank_opportunistic.config
+        - name: configusers
+          mountPath: /usr/local/sbin/add_image_users.sh
+          subPath: add_image_users.sh
+        - name: cvmfs-config-osg
+          mountPath: /cvmfs/config-osg.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-oasis
+          mountPath: /cvmfs/oasis.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-connect
+          mountPath: /cvmfs/connect.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-icecube
+          mountPath: /cvmfs/icecube.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-stash
+          mountPath: /cvmfs/stash.osgstorage.org
+          readOnly: true
+      volumes:
+      - name: configpasswd
+        secret:
+          secretName: osg-pool-sdsc-config
+          items:
+             - key: pool_password
+               path: pool_password
+          defaultMode: 256
+      - name: confighost
+        configMap:
+          name: osg-wn-prp-config
+          items:
+             - key: 50_condor_host.config
+               path: 50_condor_host.config
+      - name: configmem
+        configMap:
+          name: osg-wn-prp-config
+          items:
+             - key: 02_memory_limits.config
+               path: 02_memory_limits.config
+      - name: configgpu
+        configMap:
+          name: osg-wn-prp-gpu-config
+          items:
+             - key: 30_gpu.config
+               path: 30_gpu.config
+      - name: configopt
+        configMap:
+          name: osg-wn-prp-opt-config
+          items:
+             - key: 51_rank_opportunistic.config
+               path: 51_rank_opportunistic.config
+      - name: configusers
+        configMap:
+          name: osg-wn-prp-config
+          items:
+             - key: add_image_users.sh
+               path: add_image_users.sh
+      - name: cvmfs-config-osg
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-config-osg
+          readOnly: true
+      - name: cvmfs-oasis
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-oasis
+          readOnly: true
+      - name: cvmfs-connect
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-connect
+          readOnly: true
+      - name: cvmfs-icecube
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-icecube
+          readOnly: true
+      - name: cvmfs-stash
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-stash
+          readOnly: true
+
