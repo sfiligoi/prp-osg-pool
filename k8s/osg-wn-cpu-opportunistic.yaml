@@ -67,6 +67,9 @@ spec:
         - name: cvmfs-icecube
           mountPath: /cvmfs/icecube.opensciencegrid.org
           readOnly: true
+        - name: cvmfs-xenon
+          mountPath: /cvmfs/xenon.opensciencegrid.org
+          readOnly: true
         - name: cvmfs-stash
           mountPath: /cvmfs/stash.osgstorage.org
           readOnly: true
@@ -120,6 +123,10 @@ spec:
       - name: cvmfs-icecube
         persistentVolumeClaim:
           claimName: csi-cvmfs-pvc-icecube
+          readOnly: true
+      - name: cvmfs-xenon
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-xenon
           readOnly: true
       - name: cvmfs-stash
         persistentVolumeClaim:
