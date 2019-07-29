@@ -24,9 +24,8 @@ configmap_base:
 
 configmap_gpu:
 	-kubectl delete configmap osg-wn-prp-gpu-config -n osggpus
-	kubectl create configmap osg-wn-prp-gpu-config -n osggpus --from-file=30_gpu.config=wn-gpu.d/30_gpu.config \
-            --from-file=09_gpu_cpu.config=wn-gpu.d/09_gpu_cpu.config --from-file=09_gpu_cpu8.config=wn-gpu.d/09_gpu_cpu8.config
-	# kubectl create configmap osg-wn-prp-gpu-config -n osggpus --from-file=30_gpu.config=wn-gpu.d/30_gpu.config --from-file=09_gpu_cpu.config=wn-gpu.d/09_gpu_cpu.config --from-file=09_gpu_cpu8.config=wn-gpu.d/09_gpu_cpu8.config -o yaml --dry-run |kubectl replace -f -
+	kubectl create configmap osg-wn-prp-gpu-config -n osggpus --from-file=30_gpu.config=wn-gpu.d/30_gpu.config 
+	# kubectl create configmap osg-wn-prp-gpu-config -n osggpus --from-file=30_gpu.config=wn-gpu.d/30_gpu.config  -o yaml --dry-run |kubectl replace -f -
 
 configmap_wn_cpu:
 	-kubectl delete configmap osg-wn-prp-cpu-config -n osgcpus
