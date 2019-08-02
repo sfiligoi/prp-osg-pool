@@ -22,7 +22,7 @@ spec:
         env: suncave
       containers:
       - name: osg-wn-gpu
-        image: sfiligoi/prp-osg-pool:wn-gpu
+        image: sfiligoi/prp-osg-pool:wn-gpu-sing
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"]
         resources:
@@ -67,6 +67,12 @@ spec:
           readOnly: true
         - name: cvmfs-stash
           mountPath: /cvmfs/stash.osgstorage.org
+          readOnly: true
+        - name: cvmfs-sing
+          mountPath: /cvmfs/singularity.opensciencegrid.org
+          readOnly: true
+        - name: cvmfs-ligo-contnr
+          mountPath: /cvmfs/ligo-containers.opensciencegrid.org
           readOnly: true
       volumes:
       - name: configpasswd
@@ -125,5 +131,13 @@ spec:
       - name: cvmfs-stash
         persistentVolumeClaim:
           claimName: csi-cvmfs-pvc-stash
+          readOnly: true
+      - name: cvmfs-sing
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-osg-singularity
+          readOnly: true
+      - name: cvmfs-ligo-contnr
+        persistentVolumeClaim:
+          claimName: csi-cvmfs-pvc-ligo-contnr
           readOnly: true
 
