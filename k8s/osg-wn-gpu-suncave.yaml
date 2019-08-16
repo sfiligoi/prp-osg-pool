@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: osg-wn-gpu-suncave
@@ -7,6 +7,9 @@ metadata:
     k8s-app: osg-wn-gpu-suncave
 spec:
   replicas: 70
+  selector:
+    matchLabels:
+      k8s-app: osg-wn-gpu-suncave
   template:
     metadata: 
       labels:
@@ -19,10 +22,10 @@ spec:
         operator: Exists
       nodeSelector:
         kubernetes.io/osg-gpu: good
-        env: suncave
+        nautilus.io/latency: suncave-b
       containers:
       - name: osg-wn-gpu
-        image: sfiligoi/prp-osg-pool:wn-gpu-sing
+        image: sfiligoi/prp-osg-pool:wn-gpu
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"]
         resources:

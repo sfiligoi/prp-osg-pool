@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: osg-wn-gpu-opt
@@ -7,6 +7,9 @@ metadata:
     k8s-app: osg-wn-gpu-opt
 spec:
   replicas: 150
+  selector:
+    matchLabels:
+      k8s-app: osg-wn-gpu-opt
   template:
     metadata: 
       labels:
@@ -17,7 +20,7 @@ spec:
         kubernetes.io/osg-gpu: good
       containers:
       - name: osg-wn-gpu
-        image: sfiligoi/prp-osg-pool:wn-gpu-sing
+        image: sfiligoi/prp-osg-pool:wn-gpu
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"]
         resources:

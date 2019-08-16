@@ -4,28 +4,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: osg-wn-cpu-suncave
+  name: osg-wn-cpu-opt4
   namespace: osggpus
   labels: 
-    k8s-app: osg-wn-cpu-suncave
+    k8s-app: osg-wn-cpu-opt4
 spec:
-  replicas: 50
+  replicas: 100
   selector:
     matchLabels:
-      k8s-app: osg-wn-cpu-suncave
+      k8s-app: osg-wn-cpu-opt4
   template:
     metadata: 
       labels:
-        k8s-app: osg-wn-cpu-suncave
+        k8s-app: osg-wn-cpu-opt4
     spec:
       priorityClassName: opportunistic
-      tolerations:
-      - effect: NoSchedule
-        key: nautilus.io/suncave
-        operator: Exists
-      nodeSelector:
-        kubernetes.io/osg-gpu: good
-        nautilus.io/latency: suncave-b
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: env
+                operator: NotIn
+                values:
+                - osg
+                - I2
       containers:
       - name: osg-wn-cpu
         image: sfiligoi/prp-osg-pool:wn-cpu
@@ -33,11 +36,12 @@ spec:
         #command: ["sh", "-c", "sleep infinity"]
         resources:
            limits:
-             memory: 26Gi
-             cpu: 12
+             memory: 13Gi
+             cpu: 6
            requests:
-             memory: 20Gi
-             cpu: 8
+             memory: 10Gi
+             cpu: 3
+             # we will schedule 4 jobs, but expect 75% efficiency
         volumeMounts:
         - name: configpasswd
           mountPath: /var/lock/condor/pool_password
@@ -47,8 +51,8 @@ spec:
           mountPath: /etc/condor/config.d/50_condor_host.config
           subPath: 50_condor_host.config
         - name: configmem
-          mountPath: /etc/condor/config.d/02_memory_limits_20g.config
-          subPath: 02_memory_limits_20g.config
+          mountPath: /etc/condor/config.d/02_memory_limits_10g.config
+          subPath: 02_memory_limits_10g.config
         - name: configic
           mountPath: /etc/condor/config.d/09_icecube.config
           subPath: 09_icecube.config
@@ -94,8 +98,8 @@ spec:
         configMap:
           name: osg-wn-prp-cpu-config
           items:
-             - key: 02_memory_limits_20g.config
-               path: 02_memory_limits_20g.config
+             - key: 02_memory_limits_10g.config
+               path: 02_memory_limits_10g.config
       - name: configic
         configMap:
           name: osg-wn-prp-cpu-config
