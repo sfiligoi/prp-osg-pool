@@ -6,7 +6,7 @@ metadata:
   labels: 
     k8s-app: osg-wn-gpu-suncave
 spec:
-  replicas: 70
+  replicas: 75
   selector:
     matchLabels:
       k8s-app: osg-wn-gpu-suncave
