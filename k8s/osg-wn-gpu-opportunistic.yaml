@@ -6,7 +6,7 @@ metadata:
   labels: 
     k8s-app: osg-wn-gpu-opt
 spec:
-  replicas: 150
+  replicas: 100
   selector:
     matchLabels:
       k8s-app: osg-wn-gpu-opt
@@ -18,6 +18,10 @@ spec:
       priorityClassName: opportunistic2
       nodeSelector:
         kubernetes.io/osg-gpu: good
+      tolerations:
+      - effect: NoSchedule
+        key: nautilus.io/noceph
+        operator: Exists
       containers:
       - name: osg-wn-gpu
         image: sfiligoi/prp-osg-pool:wn-gpu

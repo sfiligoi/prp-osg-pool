@@ -9,7 +9,7 @@ metadata:
   labels: 
     k8s-app: osg-wn-cpu-opt4
 spec:
-  replicas: 100
+  replicas: 400
   selector:
     matchLabels:
       k8s-app: osg-wn-cpu-opt4
@@ -29,6 +29,10 @@ spec:
                 values:
                 - osg
                 - I2
+      tolerations:
+      - effect: NoSchedule
+        key: nautilus.io/noceph
+        operator: Exists
       containers:
       - name: osg-wn-cpu
         image: sfiligoi/prp-osg-pool:wn-cpu
