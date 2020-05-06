@@ -36,10 +36,9 @@ for mp in `echo ${MOUNT_REPOS} |tr , ' '` ; do
 done
 
 echo "$mps" > /etc/mount-and-wait.mps
-echo "$$" > /etc/mount-and-wait.pid
 
 echo "CVMFS mountpoints started: $mps"
-sleep infinity
+/usr/local/sbin/wait-only.sh
 echo "Terminating"
 
 # cleanup, if I can

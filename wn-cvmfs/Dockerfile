@@ -12,6 +12,7 @@ ENV MOUNT_REPOS="config-osg.opensciencegrid.org,icecube.opensciencegrid.org"
 ENV SQUID_URI="http://10.98.29.184:3128"
 ENV QUOTA_LIMIT="4000"
 
+ADD wait-only.sh /usr/local/sbin/wait-only.sh
 ADD mount-and-wait.sh /usr/local/sbin/mount-and-wait.sh
 ADD unmount-and-terminate.sh /usr/local/sbin/unmount-and-terminate.sh
 
