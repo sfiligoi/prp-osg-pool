@@ -29,7 +29,7 @@ for mp in `echo ${MOUNT_REPOS} |tr , ' '` ; do
 
    # cleanup
    for mp1 in $mps; do
-     umount -f /cvmfs/${mp1}
+     umount /cvmfs/${mp1}
    done
    exit 2
  fi
@@ -41,9 +41,17 @@ echo "CVMFS mountpoints started: $mps"
 /usr/local/sbin/wait-only.sh
 echo "Terminating"
 
-# cleanup, if I can
+# cleanup
 for mp1 in $mps; do
-   umount -f /cvmfs/${mp1}
+   umount /cvmfs/${mp1}
+   rc=$?
+   while [ $rc -ne 0 ]; do
+     sleep 1
+     echo "Retrying unmounting ${mp1}"
+     umount /cvmfs/${mp1}
+     rc=$?
+   done
+   echo "Unmounted ${mp1}"
 done
 echo "Bye"
 
