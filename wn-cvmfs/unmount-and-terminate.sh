@@ -2,7 +2,7 @@
 
 mps=`cat /etc/mount-and-wait.mps`
 for mp in $mps; do
-  umount /cvmfs/$mp
+  umount -f /cvmfs/$mp
 done
 
 pidk=`cat /etc/mount-and-wait.pid`

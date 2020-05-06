@@ -29,7 +29,7 @@ for mp in `echo ${MOUNT_REPOS} |tr , ' '` ; do
 
    # cleanup
    for mp1 in $mps; do
-     umount /cvmfs/${mp1}
+     umount -f /cvmfs/${mp1}
    done
    exit 2
  fi
@@ -43,7 +43,7 @@ echo "Terminating"
 
 # cleanup, if I can
 for mp1 in $mps; do
-   umount /cvmfs/${mp1}
+   umount -f /cvmfs/${mp1}
 done
 echo "Bye"
 
