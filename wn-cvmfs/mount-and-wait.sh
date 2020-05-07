@@ -42,16 +42,24 @@ echo "CVMFS mountpoints started: $mps"
 echo "Terminating"
 
 # cleanup
-for mp1 in $mps; do
-   umount /cvmfs/${mp1}
-   rc=$?
-   while [ $rc -ne 0 ]; do
-     sleep 1
-     echo "Retrying unmounting ${mp1}"
+need_cleanup=1
+while [ ${need_cleanup} -eq 1 ]; then
+  need_cleanup=0
+  for mp1 in $mps; do
+   if [ -d /cvmfs/${mp1} ]; then
      umount /cvmfs/${mp1}
      rc=$?
-   done
-   echo "Unmounted ${mp1}"
+     if [ $rc -ne 0 ]; then
+       need_cleanup=1
+       echo "Failed unmounting ${mp1}"
+     else
+       rmdir /cvmfs/${mp1}
+       echo "Unmounted ${mp1}"
+    fi
+  done
+  if [ ${need_cleanup} -eq 1 ]; then
+     sleep 1
+  fi
 done
 echo "Bye"
 
