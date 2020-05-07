@@ -46,7 +46,7 @@ echo "Terminating"
 
 # cleanup
 need_cleanup=1
-while [ ${need_cleanup} -eq 1 ]; then
+while [ ${need_cleanup} -eq 1 ]; do
   need_cleanup=0
   for mp1 in $mps; do
    if [ -d /cvmfs/${mp1} ]; then
