@@ -4,6 +4,9 @@ maxtries=15
 
 mps=`cat /etc/mount-and-wait.mps`
 
+# do not die on signal, try to complete
+trap "echo Signal-Received" SIGTERM SIGINT
+
 # cleanup
 tries=0
 for mp1 in $mps; do
@@ -26,7 +29,8 @@ done
 
 pidk=`cat /etc/mount-and-wait.pid`
 if [ "x${pidk}" != "x" ]; then
-  kill "$pidk"
+  # hard kill the waiting process, should not be doing anything but sleep
+  kill -9 "$pidk"
 else
   echo "WARNING: /etc/mount-and-wait.pid not found"
 fi

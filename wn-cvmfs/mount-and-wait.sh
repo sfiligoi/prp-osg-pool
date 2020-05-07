@@ -17,6 +17,9 @@ if [ "x${MOUNT_REPOS}" == "x" ]; then
   exit 1
 fi
 
+# do not die on signal, try to complete
+trap "echo Signal-Received" SIGTERM SIGINT
+
 mps=""
 for mp in `echo ${MOUNT_REPOS} |tr , ' '` ; do 
  mkdir /cvmfs/${mp}
