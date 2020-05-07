@@ -58,7 +58,8 @@ while [ ${need_cleanup} -eq 1 ]; do
      else
        rmdir /cvmfs/${mp1}
        echo "Unmounted ${mp1}"
-    fi
+     fi
+   fi
   done
   if [ ${need_cleanup} -eq 1 ]; then
      sleep 1
