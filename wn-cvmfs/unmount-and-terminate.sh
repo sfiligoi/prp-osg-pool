@@ -1,11 +1,23 @@
 #!/bin/bash
 
-maxtries=15
-
-mps=`cat /etc/mount-and-wait.mps`
-
 # do not die on signal, try to complete
 trap "echo Signal-Received" SIGTERM SIGINT
+
+maxtries=25
+# prevent startup race condition
+tries=0
+while [ ! -f /etc/mount-and-wait.pid ]; do
+     echo "mount-and-wait.pid"
+     sleep 1
+     let tries=1+$tries
+     if [ $tries -ge $maxtries ]; then
+       break
+     fi
+done
+
+
+maxtries=15
+mps=`cat /etc/mount-and-wait.mps`
 
 # cleanup
 tries=0
