@@ -34,6 +34,34 @@ spec:
         key: nautilus.io/noceph
         operator: Exists
       containers:
+      - name: cvmfs
+        image: sfiligoi/prp-osg-pool:wn-cvmfs
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+          capabilities:
+            add: ["SYS_ADMIN"]
+          allowPrivilegeEscalation: true
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/usr/local/sbin/unmount-and-terminate.sh"]
+        env:
+        - name: MOUNT_REPOS
+          value: "config-osg.opensciencegrid.org,icecube.opensciencegrid.org,oasis.opensciencegrid.org,connect.opensciencegrid.org,singularity.opensciencegrid.org,stash.osgstorage.org,xenon.opensciencegrid.org"
+        - name: SQUID_URI
+          value: "http://10.98.29.184:3128"
+        resources:
+           limits:
+             memory: 4Gi
+             cpu: 1
+           requests:
+             memory: 0.5Gi
+             cpu: 0.1
+        volumeMounts:
+        - mountPath: /cvmfs
+          name:  shared-cvmfs
+          mountPropagation: Bidirectional
       - name: osg-wn-cpu
         image: sfiligoi/prp-osg-pool:wn-cpu
         imagePullPolicy: Always
@@ -63,28 +91,13 @@ spec:
         - name: configusers
           mountPath: /usr/local/sbin/add_image_users.sh
           subPath: add_image_users.sh
-        - name: cvmfs-config-osg
-          mountPath: /cvmfs/config-osg.opensciencegrid.org
-          readOnly: true
-        - name: cvmfs-oasis
-          mountPath: /cvmfs/oasis.opensciencegrid.org
-          readOnly: true
-        - name: cvmfs-connect
-          mountPath: /cvmfs/connect.opensciencegrid.org
-          readOnly: true
-        - name: cvmfs-icecube
-          mountPath: /cvmfs/icecube.opensciencegrid.org
-          readOnly: true
-        - name: cvmfs-xenon
-          mountPath: /cvmfs/xenon.opensciencegrid.org
-          readOnly: true
-        - name: cvmfs-stash
-          mountPath: /cvmfs/stash.osgstorage.org
-          readOnly: true
-        - name: cvmfs-sing
-          mountPath: /cvmfs/singularity.opensciencegrid.org
+        - mountPath: /cvmfs
+          name:  shared-cvmfs
+          mountPropagation: HostToContainer
           readOnly: true
       volumes:
+      - name: shared-cvmfs
+        emptyDir: {}
       - name: configpasswd
         secret:
           secretName: osg-pool-sdsc-config
@@ -116,32 +129,4 @@ spec:
           items:
              - key: add_image_users.sh
                path: add_image_users.sh
-      - name: cvmfs-config-osg
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-config-osg
-          readOnly: true
-      - name: cvmfs-oasis
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-oasis
-          readOnly: true
-      - name: cvmfs-connect
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-connect
-          readOnly: true
-      - name: cvmfs-icecube
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-icecube
-          readOnly: true
-      - name: cvmfs-xenon
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-xenon
-          readOnly: true
-      - name: cvmfs-stash
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-stash
-          readOnly: true
-      - name: cvmfs-sing
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-osg-singularity
-          readOnly: true
 
