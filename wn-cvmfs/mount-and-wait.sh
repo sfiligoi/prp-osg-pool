@@ -45,25 +45,32 @@ echo "CVMFS mountpoints started: $mps"
 echo "Terminating"
 
 # cleanup
-need_cleanup=1
-while [ ${need_cleanup} -eq 1 ]; do
-  need_cleanup=0
-  for mp1 in $mps; do
+
+# first try the proper way
+for mp1 in $mps; do
    if [ -d /cvmfs/${mp1} ]; then
      umount /cvmfs/${mp1}
      rc=$?
      if [ $rc -ne 0 ]; then
-       need_cleanup=1
        echo "Failed unmounting ${mp1}"
      else
        rmdir /cvmfs/${mp1}
        echo "Unmounted ${mp1}"
      fi
    fi
-  done
-  if [ ${need_cleanup} -eq 1 ]; then
-     sleep 1
+done
+
+# now do a pass with the most fail-safe option possible
+for mp1 in $mps; do
+  echo "Attempting lazy umount of ${mp1}"
+  umount -l /cvmfs/${mp1}
+  if [ $? -eq 0 ]; then 
+   echo "Lazy unmounted ${mp1}"
   fi
 done
+
+# wait a tiny bit to make sure everything is cleaned up properly
+sleep 2
+
 echo "Bye"
 

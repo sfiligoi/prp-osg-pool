@@ -16,7 +16,7 @@ while [ ! -f /etc/mount-and-wait.pid ]; do
 done
 
 
-maxtries=15
+maxtries=20
 mps=`cat /etc/mount-and-wait.mps`
 
 # cleanup
