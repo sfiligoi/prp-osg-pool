@@ -3,9 +3,10 @@
 # do not die on signal, try to complete
 trap "echo Unmount-Signal-Received  | tee -a /cvmfs/cvmfs-pod.log" SIGTERM SIGINT
 
-maxtries=25
-# prevent startup race condition
+maxtries=20
 tries=0
+
+# prevent startup race condition
 while [ ! -f /etc/mount-and-wait.pid ]; do
      echo "Missing mount-and-wait.pid"  | tee -a /cvmfs/cvmfs-pod.log
      sleep 1
@@ -16,11 +17,9 @@ while [ ! -f /etc/mount-and-wait.pid ]; do
 done
 
 
-maxtries=20
 mps=`cat /etc/mount-and-wait.mps`
 
 # cleanup
-tries=0
 for mp1 in $mps; do
    umount /cvmfs/${mp1}
    rc=$?
