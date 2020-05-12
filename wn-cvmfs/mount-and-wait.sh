@@ -17,8 +17,8 @@ if [ "x${MOUNT_REPOS}" == "x" ]; then
   exit 1
 fi
 
-# do not die on signal, try to complete
-trap "echo Signal-Received   | tee -a /cvmfs/cvmfs-pod.log" SIGTERM SIGINT
+# do not die on signal, try to cleanup as fast as you can
+trap "/usr/local/sbin/force_unmount.sh" SIGTERM SIGINT
 
 mps=""
 for mp in `echo ${MOUNT_REPOS} |tr , ' '` ; do 

@@ -15,7 +15,7 @@ ENV QUOTA_LIMIT="4000"
 ADD wait-only.sh /usr/local/sbin/wait-only.sh
 ADD mount-and-wait.sh /usr/local/sbin/mount-and-wait.sh
 ADD unmount-and-terminate.sh /usr/local/sbin/unmount-and-terminate.sh
-
+ADD force_unmount.sh /usr/local/sbin/force_unmount.sh
 
 CMD ["/usr/local/sbin/mount-and-wait.sh"]
 
