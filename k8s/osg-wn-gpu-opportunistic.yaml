@@ -6,7 +6,7 @@ metadata:
   labels: 
     k8s-app: osg-wn-gpu-opt
 spec:
-  replicas: 100
+  replicas: 50
   selector:
     matchLabels:
       k8s-app: osg-wn-gpu-opt
@@ -22,19 +22,31 @@ spec:
       - effect: NoSchedule
         key: nautilus.io/noceph
         operator: Exists
+      - effect: NoSchedule
+        key: nautilus.io/chase-ci
+        operator: Exists
+      - effect: NoSchedule
+        key: nautilus.io/haosu
+        operator: Exists
       containers:
-      - name: osg-wn-gpu
+      - name: wn
         image: sfiligoi/prp-osg-pool:wn-gpu
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"]
+        # start shutdown as soon as possible, so the job has time to cleanup
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/usr/bin/kill","1"]
         resources:
            limits:
              nvidia.com/gpu: 1
              memory: 20Gi
+             cpu: 2
            requests:
              nvidia.com/gpu: 1
              memory: 17Gi
-             cpu: 1
+             cpu: 1.4
         volumeMounts:
         - name: configpasswd
           mountPath: /var/lock/condor/pool_password
@@ -55,28 +67,67 @@ spec:
         - name: configusers
           mountPath: /usr/local/sbin/add_image_users.sh
           subPath: add_image_users.sh
-        - name: cvmfs-config-osg
-          mountPath: /cvmfs/config-osg.opensciencegrid.org
+        - mountPath: /cvmfs/config-osg.opensciencegrid.org
+          name:  cvmfs-config-osg
           readOnly: true
-        - name: cvmfs-oasis
-          mountPath: /cvmfs/oasis.opensciencegrid.org
+        - mountPath: /cvmfs/oasis.opensciencegrid.org
+          name:  cvmfs-oasis
           readOnly: true
-        - name: cvmfs-connect
-          mountPath: /cvmfs/connect.opensciencegrid.org
+        - mountPath: /cvmfs/singularity.opensciencegrid.org
+          name:  cvmfs-singularity
           readOnly: true
-        - name: cvmfs-icecube
-          mountPath: /cvmfs/icecube.opensciencegrid.org
+        - mountPath: /cvmfs/ligo-containers.opensciencegrid.org
+          name:  cvmfs-ligo-containers
           readOnly: true
-        - name: cvmfs-stash
-          mountPath: /cvmfs/stash.osgstorage.org
+        - mountPath: /cvmfs/icecube.opensciencegrid.org
+          name:  cvmfs-icecube
           readOnly: true
-        - name: cvmfs-sing
-          mountPath: /cvmfs/singularity.opensciencegrid.org
+        - mountPath: /cvmfs/xenon.opensciencegrid.org
+          name:  cvmfs-xenon
           readOnly: true
-        - name: cvmfs-ligo-contnr
-          mountPath: /cvmfs/ligo-containers.opensciencegrid.org
+        - mountPath: /cvmfs/nova.opensciencegrid.org
+          name:  cvmfs-nova
+          readOnly: true
+        - mountPath: /cvmfs/fermilab.opensciencegrid.org
+          name:  cvmfs-fermilab
+          readOnly: true
+        - mountPath: /cvmfs/connect.opensciencegrid.org
+          name:  cvmfs-connect
+          readOnly: true
+        - mountPath: /cvmfs/stash.osgstorage.org
+          name:  cvmfs-stash
           readOnly: true
       volumes:
+      - name: cvmfs-config-osg
+        persistentVolumeClaim:
+          claimName: cvmfs-config-osg
+      - name: cvmfs-oasis
+        persistentVolumeClaim:
+          claimName: cvmfs-oasis
+      - name: cvmfs-singularity
+        persistentVolumeClaim:
+          claimName: cvmfs-singularity
+      - name: cvmfs-ligo-containers
+        persistentVolumeClaim:
+          claimName: cvmfs-ligo-containers
+      - name: cvmfs-icecube
+        persistentVolumeClaim:
+          claimName: cvmfs-icecube
+      - name: cvmfs-xenon
+        persistentVolumeClaim:
+          claimName: cvmfs-xenon
+      - name: cvmfs-nova
+        persistentVolumeClaim:
+          claimName: cvmfs-nova
+      - name: cvmfs-fermilab
+        persistentVolumeClaim:
+          claimName: cvmfs-fermilab
+      - name: cvmfs-connect
+        persistentVolumeClaim:
+          claimName: cvmfs-connect
+      - name: cvmfs-stash
+        persistentVolumeClaim:
+          claimName: cvmfs-stash
       - name: configpasswd
         secret:
           secretName: osg-pool-sdsc-config
@@ -114,32 +165,4 @@ spec:
           items:
              - key: add_image_users.sh
                path: add_image_users.sh
-      - name: cvmfs-config-osg
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-config-osg
-          readOnly: true
-      - name: cvmfs-oasis
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-oasis
-          readOnly: true
-      - name: cvmfs-connect
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-connect
-          readOnly: true
-      - name: cvmfs-icecube
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-icecube
-          readOnly: true
-      - name: cvmfs-stash
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-stash
-          readOnly: true
-      - name: cvmfs-sing
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-osg-singularity
-          readOnly: true
-      - name: cvmfs-ligo-contnr
-        persistentVolumeClaim:
-          claimName: csi-cvmfs-pvc-ligo-contnr
-          readOnly: true
 
