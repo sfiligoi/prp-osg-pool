@@ -1,9 +1,9 @@
-FROM nvidia/cuda:11.1-runtime-centos7
+FROM nvidia/cuda:11.0-runtime-centos7
 
 RUN yum update -y
 
 # Needed to get the recently deprecated libcudart.so symlink in place
-RUN yum -y install cuda-cudart-dev-10-0-10.0.130-1.x86_64
+RUN yum -y install cuda-cudart-devel-11-0-11.0.221-1.x86_64
 
 # OSG RPMs
 RUN yum -y install https://repo.opensciencegrid.org/osg/3.5/osg-3.5-el7-release-latest.rpm && \
