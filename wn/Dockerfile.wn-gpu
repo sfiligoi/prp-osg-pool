@@ -15,6 +15,9 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.5/osg-3.5-el7-release-
     yum -y install condor && \
     yum -y install supervisor
 
+# libseccom needed by some versions of singularity
+RUN yum -y install libseccomp
+
 # Enable OpenCL
 # As suggested by https://github.com/WIPACrepo/pyglidein/blob/master/Dockerfile
 RUN mkdir -p /etc/OpenCL/vendors && \
