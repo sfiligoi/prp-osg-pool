@@ -12,6 +12,9 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.5/osg-3.5-el7-release-
     yum -y install condor && \
     yum -y install supervisor
 
+# libseccom needed by some versions of singularity
+RUN yum -y install libseccomp
+
 RUN yum clean all
 
 # Rot-less singularity
