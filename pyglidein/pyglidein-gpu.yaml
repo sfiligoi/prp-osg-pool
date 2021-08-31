@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pyglidein-gpu
+  namespace: osggpus
+  labels: 
+    k8s-app: pyglidein-gpu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: pyglidein-gpu
+  template:
+    metadata: 
+      labels:
+        k8s-app: pyglidein-gpu
+    spec:
+      containers:
+      - name: wn
+        image: icecube/pyglidein:latest
+        imagePullPolicy: Always
+        #command: ["sh", "-c", "sleep infinity"]
+        # start shutdown as soon as possible, so the job has time to cleanup
+        env:
+        - name: SITE
+          value: "SDSC-Cloud "
+        - name: CPUS
+          value: "4"
+        - name: GPUS
+          value: "OCL0"
+        - name: MEMORY
+          value: "16000"
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: "OCL0" 
+        resources:
+           limits:
+             nvidia.com/gpu: 1
+             memory: 20Gi
+             cpu: 4
+           requests:
+             nvidia.com/gpu: 1
+             memory: 16Gi
+             cpu: 3.1
+        volumeMounts:
+        - mountPath: /cvmfs/config-osg.opensciencegrid.org
+          name:  cvmfs-config-osg
+          readOnly: true
+        - mountPath: /cvmfs/oasis.opensciencegrid.org
+          name:  cvmfs-oasis
+          readOnly: true
+        - mountPath: /cvmfs/singularity.opensciencegrid.org
+          name:  cvmfs-singularity
+          readOnly: true
+        - mountPath: /cvmfs/icecube.opensciencegrid.org
+          name:  cvmfs-icecube
+          readOnly: true
+        - mountPath: /cvmfs/connect.opensciencegrid.org
+          name:  cvmfs-connect
+          readOnly: true
+        - mountPath: /cvmfs/stash.osgstorage.org
+          name:  cvmfs-stash
+          readOnly: true
+      volumes:
+      - name: cvmfs-config-osg
+        persistentVolumeClaim:
+          claimName: cvmfs-config-osg
+      - name: cvmfs-oasis
+        persistentVolumeClaim:
+          claimName: cvmfs-oasis
+      - name: cvmfs-singularity
+        persistentVolumeClaim:
+          claimName: cvmfs-singularity
+      - name: cvmfs-icecube
+        persistentVolumeClaim:
+          claimName: cvmfs-icecube
+      - name: cvmfs-connect
+        persistentVolumeClaim:
+          claimName: cvmfs-connect
+      - name: cvmfs-stash
+        persistentVolumeClaim:
+          claimName: cvmfs-stash
+
