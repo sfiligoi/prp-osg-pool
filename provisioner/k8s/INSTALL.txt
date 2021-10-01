@@ -1,0 +1,6 @@
+Note: Relies on
+https://github.com/sfiligoi/prp-htcondor-portal
+
+For each supported namespace, first deploy
+prp-htcondor-portal/provisioner/k8s/prp-htcondor-provisioner-account.yaml
+
