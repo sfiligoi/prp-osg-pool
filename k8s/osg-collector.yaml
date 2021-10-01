@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: osg-collector-prp-sdsc
@@ -6,11 +6,18 @@ metadata:
   labels:
     k8s-app: osg-collector-prp
 spec:
+  selector:
+    matchLabels:
+      k8s-app: osg-collector-prp
   template:
     metadata: 
       labels:
         k8s-app: osg-collector-prp
     spec:
+      tolerations:
+      - effect: NoSchedule
+        key: nautilus.io/stashcache
+        operator: Exists
       nodeSelector: 
         kubernetes.io/hostname: xcache-11.t2.ucsd.edu
       containers:
@@ -18,13 +25,20 @@ spec:
         image: sfiligoi/prp-osg-pool:collector
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"]
+        resources:
+           limits:
+             memory: 2Gi
+             cpu: 1.5
+           requests:
+             memory: 0.2Gi
+             cpu: 0.1
         ports:
         - containerPort: 9618
         volumeMounts:
         - name: condordata
           mountPath: /var/lib/condor
         - name: configpasswd
-          mountPath: /var/lock/condor/pool_password
+          mountPath: /etc/condor/secret/pool_password
           subPath: pool_password
           readOnly: true
       volumes:
