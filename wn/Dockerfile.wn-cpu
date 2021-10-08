@@ -15,6 +15,9 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.5/osg-3.5-el7-release-
 # libseccom needed by some versions of singularity
 RUN yum -y install libseccomp
 
+# needed by CVMFS checks
+RUN yum -y install attr
+
 RUN yum clean all
 
 # Rot-less singularity
