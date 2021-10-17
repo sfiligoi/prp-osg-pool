@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.2-runtime-centos7
+FROM nvidia/cuda:11.3.0-runtime-centos7
 
 RUN yum update -y && yum clean all
 
