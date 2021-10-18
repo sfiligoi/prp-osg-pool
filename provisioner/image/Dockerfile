@@ -15,7 +15,7 @@ RUN pip3 install kubernetes
 
 
 RUN mkdir -p /opt/provisioner && cd /opt/provisioner && git clone https://github.com/sfiligoi/prp-htcondor-portal.git && cd prp-htcondor-portal && git checkout main
-RUN mkdir -p /opt/provisioner && cd /opt/provisioner && git clone https://github.com/sfiligoi/prp-htcondor-pool.git && cd prp-htcondor-pool && git checkout provisioner_2109
+RUN mkdir -p /opt/provisioner && cd /opt/provisioner && git clone https://github.com/sfiligoi/prp-osg-pool.git && cd prp-osg-pool && git checkout provisioner_2109
 
 RUN useradd provisioner && chown -R provisioner /opt/provisioner
 
