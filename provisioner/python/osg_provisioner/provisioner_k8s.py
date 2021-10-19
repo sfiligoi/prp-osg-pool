@@ -65,7 +65,7 @@ class OSGProvisionerK8S(ProvisionerK8S):
    def _get_priority_class(self, attrs):
       pc = self.priority_class
       if pc==None:
-         if int(attrs[attrs])>0:
+         if int(attrs['GPUs'])>0:
             pc = 'opportunistic2'
          else:
             pc = 'opportunistic'
