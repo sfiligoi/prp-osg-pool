@@ -57,6 +57,8 @@ class OSGProvisionerK8S(ProvisionerK8S):
                               additional_labels, additional_envs, additional_volumes,
                               additional_tolerations, additional_node_selectors)
       self.cvmfs_mounts = cvmfs_mounts
+      # we will use a slightly different app-name for easier monitoring
+      self.app_name = 'osg-wn'
 
 
    # INTERNAL
@@ -72,6 +74,7 @@ class OSGProvisionerK8S(ProvisionerK8S):
 
    def _augment_labels(self, labels, attrs):
       """Add any additional labels to the dictionary (attrs is read-only)"""
+      labels['osg-provisioner'] 'wn'
       return
 
    def _augment_environment(self, env_list, attrs):
