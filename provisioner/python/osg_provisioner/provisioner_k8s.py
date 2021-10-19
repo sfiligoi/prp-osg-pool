@@ -91,10 +91,10 @@ class OSGProvisionerK8S(ProvisionerK8S):
                       {
                          'secret': {
                             'secretName': 'osg-pool-sdsc-config',
+                            'defaultMode': 256,
                             'items': [{
                                'key': 'pool_password',
-                               'path': 'pool_password',
-                               'defaultMode': 256
+                               'path': 'pool_password'
                             }]
                          }
                       },
