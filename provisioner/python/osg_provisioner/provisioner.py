@@ -9,7 +9,7 @@
 import sys
 import time
 
-import provisioner_k8s as provisioner_k8s
+from . import provisioner_k8s as provisioner_k8s
 
 
 import prp_provisioner.provisioner_logging as provisioner_logging
