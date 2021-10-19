@@ -7,7 +7,7 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.5/osg-3.5-el7-release-
     yum -y install less which \
                    redhat-lsb-core && \
     yum -y install python3-pip git && \
-    yum -y install condor && \
+    yum -y install condor python3-condor && \
     yum clean all
 
 
