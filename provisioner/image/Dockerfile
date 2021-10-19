@@ -27,4 +27,5 @@ RUN useradd provisioner && chown -R provisioner /opt/provisioner
 RUN su provisioner -c '/usr/bin/ln -s /opt/provisioner/prp-osg-pool/provisioner/python/osg_provisioner /home/provisioner/osg_provisioner'
 RUN su provisioner -c '/usr/bin/ln -s /opt/provisioner/prp-htcondor-portal/provisioner/python/prp_provisioner /home/provisioner/prp_provisioner'
 
+ADD setup_k8s_creds.sh /opt/provisioner/setup_k8s_creds.sh
 
