@@ -14,10 +14,17 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.5/osg-3.5-el7-release-
 RUN pip3 install kubernetes
 
 
+# add condor config
+ADD 98_security.config /etc/condor/config.d/98_security.config
+
+
+# configure python packages
 RUN mkdir -p /opt/provisioner && cd /opt/provisioner && git clone https://github.com/sfiligoi/prp-htcondor-portal.git && cd prp-htcondor-portal && git checkout main
 RUN mkdir -p /opt/provisioner && cd /opt/provisioner && git clone https://github.com/sfiligoi/prp-osg-pool.git && cd prp-osg-pool && git checkout provisioner_2109
 
 RUN useradd provisioner && chown -R provisioner /opt/provisioner
 
-ADD 98_security.config /etc/condor/config.d/98_security.config
+RUN su provisioner -c '/usr/bin/ln -s /opt/provisioner/prp-osg-pool/provisioner/python/osg_provisioner /home/provisioner/osg_provisioner'
+RUN su provisioner -c '/usr/bin/ln -s /opt/provisioner/prp-htcondor-portal/provisioner/python/prp_provisioner /home/provisioner/prp_provisioner'
+
 
