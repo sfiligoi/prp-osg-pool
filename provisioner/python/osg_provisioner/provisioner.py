@@ -21,7 +21,7 @@ def main(namespace, cvmfs_mounts, max_pods_per_cluster=10, sleep_time=10):
    # TBD: Proper security
    schedd_obj = provisioner_htcondor.ProvisionerSchedd(namespace, {'.*':'.*'})
    collector_obj = provisioner_htcondor.ProvisionerCollector(namespace, '.*')
-   k8s_obj = provisioner_k8s.OSGProvisionerK8S(namespace)
+   k8s_obj = provisioner_k8s.OSGProvisionerK8S(namespace, cvmfs_mounts)
    k8s_obj.authenticate()
 
    el = event_loop.ProvisionerEventLoop(log_obj, schedd_obj, collector_obj, k8s_obj, max_pods_per_cluster)
