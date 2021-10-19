@@ -74,7 +74,7 @@ class OSGProvisionerK8S(ProvisionerK8S):
 
    def _augment_labels(self, labels, attrs):
       """Add any additional labels to the dictionary (attrs is read-only)"""
-      labels['osg-provisioner'] 'wn'
+      labels['osg-provisioner'] = 'wn'
       return
 
    def _augment_environment(self, env_list, attrs):
