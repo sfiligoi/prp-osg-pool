@@ -20,6 +20,7 @@ class OSGProvisionerK8S(ProvisionerK8S):
    def __init__(self, namespace, cvmfs_mounts,
                 condor_host="osg-collector-prp.osg.svc.cluster.local",
                 k8s_image='sfiligoi/prp-osg-pool:wn-p2109',
+                k8s_image_pull_policy='Always',
                 priority_class = None,
                 additional_labels = {},
                 additional_envs = [],
@@ -36,6 +37,8 @@ class OSGProvisionerK8S(ProvisionerK8S):
              DNS address of the HTCOndor collector
          k8s_image: string (Optional)
              WN Container image to use in the pod
+         k8s_image_pull_policy: string (Optional)
+             WN Container image pull policy
          priority_class: string (Optional)
              priorityClassName to associate with the pod
          additional_labels: dictionary of strings (Optional)
@@ -50,17 +53,13 @@ class OSGProvisionerK8S(ProvisionerK8S):
              nodeSelectors to attach to the pod
       """
       ProvisionerK8S.__init__(self, namespace,
-                              condor_host, k8s_image, priority_class,
+                              condor_host, k8s_image, k8s_image_pull_policy, priority_class,
                               additional_labels, additional_envs, additional_volumes,
                               additional_tolerations, additional_node_selectors)
       self.cvmfs_mounts = cvmfs_mounts
 
 
    # INTERNAL
-
-   # These can be re-implemented by derivative classes
-   def _get_k8s_image(self, attrs):
-      return self.k8s_image
 
    def _get_priority_class(self, attrs):
       pc = self.priority_class
