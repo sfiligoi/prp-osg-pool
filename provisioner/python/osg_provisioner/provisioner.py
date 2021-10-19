@@ -16,7 +16,7 @@ import prp_provisioner.provisioner_logging as provisioner_logging
 import prp_provisioner.provisioner_htcondor as provisioner_htcondor
 import prp_provisioner.event_loop as event_loop
 
-def main(namespace, cvmfs_mounts, max_pods_per_cluster=10, sleep_time=10):
+def main(namespace, cvmfs_mounts, max_pods_per_cluster=10, sleep_time=60):
    log_obj = provisioner_logging.ProvisionerStdoutLogging(want_log_debug=True)
    # TBD: Proper security
    schedd_obj = provisioner_htcondor.ProvisionerSchedd(namespace, {'.*':'.*'})
