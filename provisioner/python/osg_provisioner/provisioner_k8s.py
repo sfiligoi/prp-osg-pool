@@ -22,6 +22,7 @@ class OSGProvisionerK8S(ProvisionerK8S):
                 k8s_image='sfiligoi/prp-osg-pool:wn-p2109',
                 k8s_image_pull_policy='Always',
                 priority_class = None,
+                base_tolerations = ['nautilus.io/noceph','nautilus.io/chase-ci','nautilus.io/haosu'],
                 additional_labels = {},
                 additional_envs = [],
                 additional_volumes = {},
@@ -41,6 +42,8 @@ class OSGProvisionerK8S(ProvisionerK8S):
              WN Container image pull policy
          priority_class: string (Optional)
              priorityClassName to associate with the pod
+         base_tolerations: list of strings (Optional)
+             Tolerations of the form NoSchedule/Exists to add to the container
          additional_labels: dictionary of strings (Optional)
              Labels to attach to the pod
          additional_envs: list of (name,value) pairs (Optional)
@@ -53,7 +56,7 @@ class OSGProvisionerK8S(ProvisionerK8S):
              nodeSelectors to attach to the pod
       """
       ProvisionerK8S.__init__(self, namespace,
-                              condor_host, k8s_image, k8s_image_pull_policy, priority_class,
+                              condor_host, k8s_image, k8s_image_pull_policy, priority_class, base_tolerations,
                               additional_labels, additional_envs, additional_volumes,
                               additional_tolerations, additional_node_selectors)
       self.cvmfs_mounts = cvmfs_mounts
