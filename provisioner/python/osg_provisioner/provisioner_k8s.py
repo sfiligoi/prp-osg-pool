@@ -126,11 +126,8 @@ class OSGProvisionerK8S(ProvisionerK8S):
 
       return
 
-   def _augment_tolerations(self, t_list, attrs):
-      """Add any additional dictionaries to the list (attrs is read-only)"""
-      return
-
    def _augment_node_selectors(self, node_selectors, attrs):
       """Add any additional elements to the dictionary (attrs is read-only)"""
+      node_selectors['kubernetes.io/osg-gpu'] = 'good'
       return
 
