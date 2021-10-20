@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: osg-provisioner-icecube
+  namespace: osg-icecube
+  labels:
+    k8s-app: osg-provisioner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: osg-provisioner
+  template:
+    metadata: 
+      labels:
+        k8s-app: osg-provisioner
+    spec:
+      serviceAccountName: prp-htcondor-provisioner
+      restartPolicy: Always
+      nodeSelector:
+        topology.kubernetes.io/region: us-west
+      containers:
+      - name: provisioner
+        image: sfiligoi/prp-osg-pool:provisioner
+        imagePullPolicy: Always
+        #command: ["sh", "-c", "sleep infinity"]
+        env:
+        - name: K8S_NAMESPACE
+          value: "osg-icecube"
+        - name: CVMFS_MOUNTS
+          value: "singularity,icecube,connect"
+        resources:
+           limits:
+             memory: 2Gi
+             cpu: 1
+           requests:
+             memory: 0.5Gi
+             cpu: 0.1
+        volumeMounts:
+        - name: configpasswd
+          mountPath: /etc/condor/secret/pool_password
+          subPath: pool_password
+          readOnly: true
+      volumes:
+      - name: configpasswd
+        secret:
+          secretName: osg-pool-sdsc-config
+          items:
+             - key: pool_password
+               path: pool_password
+          # allow access by any user in the pod, single purpose
+          defaultMode: 292
+
