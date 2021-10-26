@@ -3,6 +3,10 @@ FROM sfiligoi/prp-portal-wn
 # needed by CVMFS checks
 RUN yum -y install attr && yum clean all
 
+# since we have CVMFS, use that singularity as it is updated more often
+# embedded in the npid script
+ADD scripts/singularity_npid.sh /usr/bin/singularity_npid.sh
+
 # glideins will try to use the default singularity, so must create the symlink
 RUN ln -s  /usr/bin/singularity_npid.sh /usr/bin/singularity
 
@@ -10,7 +14,8 @@ RUN ln -s  /usr/bin/singularity_npid.sh /usr/bin/singularity
 ADD image-config.d/* /etc/constainer_startup/image-config.d/
 
 # we will use passwd authentication
-ADD 98_security.config /etc/condor/config.d/
+# and force mount /cvmfs
+ADD condor.d/* /etc/condor/config.d/
 
 #
 # Reminder: Accepts env variables
