@@ -30,7 +30,7 @@ def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time
          el.one_iteration()
       except:
          log_obj.log_debug("[Main] Exception in one_iteration")
-      og_obj.sync()
+      log_obj.sync()
       time.sleep(sleep_time)
 
 if __name__ == "__main__":
