@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: osg-provisioner-icecube
-  namespace: osg-icecube
+  name: osg-provisioner-opportunistic
+  namespace: osg-opportunistic
   labels:
     k8s-app: osg-provisioner
 spec:
@@ -26,9 +26,9 @@ spec:
         #command: ["sh", "-c", "sleep infinity"]
         env:
         - name: K8S_NAMESPACE
-          value: "osg-icecube"
+          value: "osg-opportunistic"
         - name: CVMFS_MOUNTS
-          value: "singularity,icecube,connect"
+          value: "singularity,icecube,connect,fermilab,nova,xenon"
         resources:
            limits:
              memory: 2Gi
@@ -55,4 +55,3 @@ spec:
       - name: log-pvc
         persistentVolumeClaim:
           claimName: osg-provisioner-log-pvc
-
