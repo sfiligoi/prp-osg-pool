@@ -11,4 +11,4 @@
 import sys
 import osg_provisioner.provisioner
 
-osg_provisioner.provisioner.main(sys.argv[1], sys.argv[2].split(","))
+osg_provisioner.provisioner.main(sys.argv[1], sys.argv[2], sys.argv[3].split(","))
