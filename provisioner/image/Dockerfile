@@ -14,16 +14,9 @@ RUN yum -y install https://repo.opensciencegrid.org/osg/3.6/osg-3.6-el7-release-
 RUN pip3 install kubernetes
 
 
-# add condor config
-ADD 98_security.config /etc/condor/config.d/98_security.config
-
-
 # configure python packages
 RUN mkdir -p /opt/provisioner && cd /opt/provisioner && git clone https://github.com/sfiligoi/prp-htcondor-portal.git && cd prp-htcondor-portal && git checkout osg_pool_base
-RUN mkdir -p /opt/provisioner && cd /opt/provisioner && git clone https://github.com/sfiligoi/prp-osg-pool.git && cd prp-osg-pool && git checkout provisioner_2109
-
-ADD setup_k8s_creds.sh /opt/provisioner/setup_k8s_creds.sh
-ADD provisioner_main.py /opt/provisioner/provisioner_main.py
+RUN mkdir -p /opt/provisioner && cd /opt/provisioner && git clone https://github.com/sfiligoi/prp-osg-pool.git && cd prp-osg-pool && git checkout provisioner_direct_2202
 
 RUN useradd provisioner && chown -R provisioner /opt/provisioner
 
@@ -34,10 +27,12 @@ ADD provisioner_main.py /home/provisioner/provisioner_main.py
 RUN chown provisioner /home/provisioner/provisioner_main.py
 
 ADD setup_k8s_creds.sh /opt/provisioner/setup_k8s_creds.sh
+ADD setup_htcondor_creds.sh /opt/provisioner/setup_htcondor_creds.sh
 ADD provisioner_startup.sh /opt/provisioner/provisioner_startup.sh
 
 #
 # Requires env variables
+# CONDOR_HOST
 # K8S_NAMESPACE
 # CVMFS_MOUNTS
 #

@@ -2,13 +2,16 @@
 
 # basic setup
 /opt/provisioner/setup_k8s_creds.sh
+/opt/provisioner/setup_htcondor_creds.sh
 
 mkdir -p /var/log/provisioner/logs
 chown provisioner:provisioner /var/log/provisioner/logs
 
-cp /etc/condor/secret/pool_password /etc/condor/secret/pool_password.provisioner
-chown provisioner:provisioner /etc/condor/secret/pool_password.provisioner
-chmod go-rwx /etc/condor/secret/pool_password.provisioner
+if [ "x${CONDOR_HOST}" == "x" ]; then
+  echo "Missing CONDR_HOST"
+  sleep 15
+  exit 1
+fi
 
 if [ "x${K8S_NAMESPACE}" == "x" ]; then
   echo "Missing K8S_NAMESPACE"
@@ -21,6 +24,8 @@ if [ "x${CVMFS_MOUNTS}" == "x" ]; then
   sleep 15
   exit 1
 fi
+
+echo "CONDOR_HOST=${CONDOR_HOST}" > /etc/condor/config.d/02_condor_host.config
 
 trap 'echo signal received!; kill $(jobs -p); wait' SIGINT SIGTERM
 
