@@ -6,6 +6,10 @@
 mkdir -p /var/log/provisioner/logs
 chown provisioner:provisioner /var/log/provisioner/logs
 
+cp /etc/condor/secret/pool_password /etc/condor/secret/pool_password.provisioner
+chown provisioner:provisioner /etc/condor/secret/pool_password.provisioner
+chmod go-rwx /etc/condor/secret/pool_password.provisioner
+
 if [ "x${K8S_NAMESPACE}" == "x" ]; then
   echo "Missing K8S_NAMESPACE"
   sleep 15
