@@ -22,9 +22,6 @@ ADD 98_security.config /etc/condor/config.d/98_security.config
 RUN mkdir -p /opt/provisioner && cd /opt/provisioner && git clone https://github.com/sfiligoi/prp-htcondor-portal.git && cd prp-htcondor-portal && git checkout osg_pool_base
 RUN mkdir -p /opt/provisioner && cd /opt/provisioner && git clone https://github.com/sfiligoi/prp-osg-pool.git && cd prp-osg-pool && git checkout provisioner_2109
 
-ADD setup_k8s_creds.sh /opt/provisioner/setup_k8s_creds.sh
-ADD provisioner_main.py /opt/provisioner/provisioner_main.py
-
 RUN useradd provisioner && chown -R provisioner /opt/provisioner
 
 RUN su provisioner -c '/usr/bin/ln -s /opt/provisioner/prp-osg-pool/provisioner/python/osg_provisioner /home/provisioner/osg_provisioner'
@@ -32,6 +29,7 @@ RUN su provisioner -c '/usr/bin/ln -s /opt/provisioner/prp-htcondor-portal/provi
 
 ADD provisioner_main.py /home/provisioner/provisioner_main.py
 RUN chown provisioner /home/provisioner/provisioner_main.py
+ADD osg_provisioner.conf /home/provisioner/osg_provisioner.conf
 
 ADD setup_k8s_creds.sh /opt/provisioner/setup_k8s_creds.sh
 ADD provisioner_startup.sh /opt/provisioner/provisioner_startup.sh
