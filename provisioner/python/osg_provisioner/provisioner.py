@@ -12,6 +12,7 @@ import configparser
 
 from . import provisioner_k8s as provisioner_k8s
 
+import prp_provisioner.provisioner_k8s as prp_provisioner_k8s
 import prp_provisioner.provisioner_logging as provisioner_logging
 import prp_provisioner.provisioner_htcondor as provisioner_htcondor
 import prp_provisioner.event_loop as event_loop
@@ -19,7 +20,7 @@ import prp_provisioner.event_loop as event_loop
 def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time=60):
    fconfig = configparser.ConfigParser()
    fconfig.read('osg_provisioner.conf')
-   kconfig = provisioner_k8s.ProvisionerK8SConfig(namespace)
+   kconfig = prp_provisioner_k8s.ProvisionerK8SConfig(namespace)
    kconfig.parse(fconfig['k8s'])
 
    # we will distinguish this class by these attrs
