@@ -33,7 +33,7 @@ fi
 
 echo "# detected CVMFS mounts" > /etc/condor/config.d/10_cvmfs.conf
 for d in `(cd /cvmfs && /usr/bin/ls -d *)`; do
-  v=`echo $d | sed 's/\./_/g'`
+  v=`echo $d | sed 's/\./_/g' | sed 's/-/_/g'`
   echo "HAS_CVMFS_$v=True" >> /etc/condor/config.d/10_cvmfs.conf
   echo 'STARTD_EXPRS = $(STARTD_EXPRS)' HAS_CVMFS_$v >> /etc/condor/config.d/10_cvmfs.conf
 done
