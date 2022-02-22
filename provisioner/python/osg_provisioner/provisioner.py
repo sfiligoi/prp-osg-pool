@@ -8,19 +8,35 @@
 
 import sys
 import time
+import configparser
 
 from . import provisioner_k8s as provisioner_k8s
 
+import prp_provisioner.provisioner_k8s as prp_provisioner_k8s
 import prp_provisioner.provisioner_logging as provisioner_logging
 import prp_provisioner.provisioner_htcondor as provisioner_htcondor
 import prp_provisioner.event_loop as event_loop
 
 def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time=60):
+   fconfig = configparser.ConfigParser()
+   fconfig.read('osg_provisioner.conf')
+   kconfig = prp_provisioner_k8s.ProvisionerK8SConfig(namespace)
+   kconfig.parse(fconfig['k8s'])
+
+   # we will distinguish this class by these attrs
+   kconfig.additional_labels['osg-provisioner'] = 'wn'
+   kconfig.app_name = 'osg-wn'
+
+   # we always need the osg-config, oasis and stash
+   for c in (['config-osg','oasis','stash'] + cvmfs_mounts):
+      ext='opensciencegrid.org' if c!='stash' else 'osgstorage.org'
+      kconfig.base_pvc_volumes["cvmfs-%s"%c] =  "/cvmfs/%s.%s"%(c,ext)
+
    log_obj = provisioner_logging.ProvisionerFileLogging(log_fname, want_log_debug=True)
-   # TBD: Proper security
+   # TBD: Strong security
    schedd_obj = provisioner_htcondor.ProvisionerSchedd(namespace, {'.*':'.*'})
    collector_obj = provisioner_htcondor.ProvisionerCollector(namespace, '.*')
-   k8s_obj = provisioner_k8s.OSGProvisionerK8S(namespace, cvmfs_mounts)
+   k8s_obj = provisioner_k8s.OSGProvisionerK8S(kconfig)
    k8s_obj.authenticate()
 
    el = event_loop.ProvisionerEventLoop(log_obj, schedd_obj, collector_obj, k8s_obj, max_pods_per_cluster)
