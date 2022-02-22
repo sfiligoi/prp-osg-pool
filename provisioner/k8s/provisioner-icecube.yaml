@@ -28,7 +28,7 @@ spec:
         - name: K8S_NAMESPACE
           value: "osg-icecube"
         - name: CVMFS_MOUNTS
-          value: "singularity,icecube,connect"
+          value: "singularity,icecube,connect,stash"
         resources:
            limits:
              memory: 2Gi
