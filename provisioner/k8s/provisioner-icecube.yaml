@@ -38,8 +38,8 @@ spec:
              cpu: 0.1
         volumeMounts:
         - name: configpasswd
-          mountPath: /etc/condor/secret/pool_password
-          subPath: pool_password
+          mountPath: /etc/condor/tokens.d/prp-wn.token
+          subPath: prp-wn.token
           readOnly: true
         - name: kconf
           mountPath: /home/provisioner/osg_provisioner.conf
@@ -49,12 +49,11 @@ spec:
       volumes:
       - name: configpasswd
         secret:
-          secretName: osg-pool-sdsc-config
+          secretName: osg-wn-secret
           items:
-             - key: pool_password
-               path: pool_password
-          # allow access by any user in the pod, single purpose
-          defaultMode: 292
+             - key: prp-wn.token
+               path: prp-wn.token
+          defaultMode: 256
       - name: kconf
         configMap:
           items:
