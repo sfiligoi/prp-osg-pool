@@ -8,7 +8,7 @@ mkdir -p /var/log/provisioner/logs
 chown provisioner:provisioner /var/log/provisioner/logs
 
 if [ "x${CONDOR_HOST}" == "x" ]; then
-  echo "Missing CONDR_HOST"
+  echo "Missing CONDOR_HOST"
   sleep 15
   exit 1
 fi
@@ -26,6 +26,9 @@ if [ "x${CVMFS_MOUNTS}" == "x" ]; then
 fi
 
 echo "CONDOR_HOST=${CONDOR_HOST}" > /etc/condor/config.d/02_condor_host.config
+
+echo "[DEFAULT]" > /home/provisioner/pod.conf
+echo "condor_host=${CONDOR_HOST}" >> /home/provisioner/pod.conf
 
 trap 'echo signal received!; kill $(jobs -p); wait' SIGINT SIGTERM
 
