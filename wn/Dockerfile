@@ -7,9 +7,6 @@ RUN yum -y install attr && yum clean all
 # embedded in the npid script
 ADD scripts/singularity_npid.sh /usr/bin/singularity_npid.sh
 
-# glideins will try to use the default singularity, so must create the symlink
-RUN ln -s  /usr/bin/singularity_npid.sh /usr/bin/singularity
-
 # Some additional CVMFS checks, also use a PRP-specific DNS name
 ADD image-config.d/* /etc/constainer_startup/image-config.d/
 
@@ -20,6 +17,8 @@ ADD condor.d/* /etc/condor/config.d/
 #
 # Env variables
 # USE_SINGULARITY=no|native|npid
+# GLIDEIN_Site
+# ACCEPT_JOBS_FOR_HOURS
 #
 # Reminder: Accepts also env variables
 # CONDOR_HOST STARTD_NOCLAIM_SHUTDOWN
