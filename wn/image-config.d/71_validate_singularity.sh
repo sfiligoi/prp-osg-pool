@@ -1,5 +1,15 @@
 #!/bin/bash
 
+if [ "x${USE_SINGULARITY}" == "xno" ]; then
+  rm -f /usr/bin/singularity
+elif [ "x${USE_SINGULARITY}" == "xnpid" ]; then
+  # remove any local version
+  rm -f /usr/bin/singularity
+  # use the npid version, whch relies on cvmfs singularity
+  ln -s  /usr/bin/singularity_npid.sh /usr/bin/singularity
+fi
+# else do nothing, let Condor figure it out
+
 if [ -f "/usr/bin/singularity" ]; then
   # only test for singularity functionality if singularity is present
   # may not be in all pods

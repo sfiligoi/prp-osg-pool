@@ -18,7 +18,10 @@ ADD image-config.d/* /etc/constainer_startup/image-config.d/
 ADD condor.d/* /etc/condor/config.d/
 
 #
-# Reminder: Accepts env variables
+# Env variables
+# USE_SINGULARITY=no|native|npid
+#
+# Reminder: Accepts also env variables
 # CONDOR_HOST STARTD_NOCLAIM_SHUTDOWN
 # NUM_CPUS MEMORY DISK NUM_GPUS
 # K8S_NAMESPACE
