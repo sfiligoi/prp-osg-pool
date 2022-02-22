@@ -41,6 +41,9 @@ spec:
           mountPath: /etc/condor/secret/pool_password
           subPath: pool_password
           readOnly: true
+        - name: kconf
+          mountPath: /home/provisioner/osg_provisioner.conf
+          subPath: osg_provisioner.conf
         - name: log-pvc
           mountPath: /var/log/provisioner
       volumes:
@@ -52,6 +55,12 @@ spec:
                path: pool_password
           # allow access by any user in the pod, single purpose
           defaultMode: 292
+      - name: kconf
+        configMap:
+          items:
+          - key: osg_provisioner.conf
+            path: osg_provisioner.conf
+          name: osg-provisioner-config
       - name: log-pvc
         persistentVolumeClaim:
           claimName: osg-provisioner-log-pvc

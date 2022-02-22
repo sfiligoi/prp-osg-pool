@@ -23,7 +23,6 @@ RUN su provisioner -c '/usr/bin/ln -s /opt/provisioner/prp-htcondor-portal/provi
 
 ADD provisioner_main.py /home/provisioner/provisioner_main.py
 RUN chown provisioner /home/provisioner/provisioner_main.py
-ADD osg_provisioner.conf /home/provisioner/osg_provisioner.conf
 
 ADD setup_k8s_creds.sh /opt/provisioner/setup_k8s_creds.sh
 ADD setup_htcondor_creds.sh /opt/provisioner/setup_htcondor_creds.sh

@@ -8,4 +8,5 @@ kubectl create -n $NAMESPACE -f prp-htcondor-portal/provisioner/k8s/prp-htcondor
 2) create shared secret
 kubectl create secret generic osg-pool-sdsc-config -n $NAMESPACE --from-file=pool_password
 
-
+3) create config file
+kubectl create configmap osg-provisioner-config -n $NAMESPACE --from-file=osg_provisioner.conf=osg_provisioner.conf
