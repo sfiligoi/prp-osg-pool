@@ -6,6 +6,8 @@ RUN yum -y install attr && yum clean all
 # since we have CVMFS, use that singularity as it is updated more often
 # embedded in the npid script
 ADD scripts/singularity_npid.sh /usr/bin/singularity_npid.sh
+ADD scripts/monitor_cvmfs.sh /usr/sbin/monitor_cvmfs.sh
+RUN chmod a+x /usr/sbin/monitor_cvmfs.sh
 
 # Some additional CVMFS checks, also use a PRP-specific DNS name
 ADD image-config.d/* /etc/constainer_startup/image-config.d/
@@ -19,6 +21,7 @@ ADD condor.d/* /etc/condor/config.d/
 # USE_SINGULARITY=no|native|npid
 # GLIDEIN_Site
 # ACCEPT_JOBS_FOR_HOURS
+# CVMFS_REPOS
 #
 # Reminder: Accepts also env variables
 # CONDOR_HOST STARTD_NOCLAIM_SHUTDOWN
