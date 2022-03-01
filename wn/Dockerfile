@@ -26,6 +26,8 @@ ADD condor.d/* /etc/condor/config.d/
 # Reminder: Accepts also env variables
 # CONDOR_HOST STARTD_NOCLAIM_SHUTDOWN
 # NUM_CPUS MEMORY DISK NUM_GPUS
-# K8S_NAMESPACE
+# PHYSICAL_HOSTNAME
+# K8S_NAMESPACE K8S_DOMAIN
+# NVIDIA_SYMLINK
 #
 
