@@ -25,10 +25,15 @@ def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time
    kconfig.additional_labels['osg-provisioner'] = 'wn'
    kconfig.app_name = 'osg-wn'
 
+   cvmfsenvs=[]
+
    # we always need the osg-config and oasis
    for c in (['config-osg','oasis'] + cvmfs_mounts):
       ext='opensciencegrid.org' if c!='stash' else 'osgstorage.org'
       kconfig.base_pvc_volumes["cvmfs-%s"%c] =  "/cvmfs/%s.%s"%(c,ext)
+      cvmfsenvs.append( "%s.%s"%(c,ext) )
+
+   kconfig.additional_envs['CVMFS_REPOS'] = ",".join(cvmfsenvs)
 
    log_obj = provisioner_logging.ProvisionerFileLogging(log_fname, want_log_debug=True)
    # TBD: Strong security
