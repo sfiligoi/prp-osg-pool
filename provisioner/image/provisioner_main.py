@@ -19,17 +19,18 @@ def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time
    fconfig = configparser.ConfigParser()
    fconfig.read(('pod.conf','osg_provisioner.conf'))
    kconfig = provisioner_k8s.ProvisionerK8SConfig(namespace)
+   cconfig = provisioner_htcondor.ProvisionerHTCConfig(namespace)
 
    # we will distinguish this class by these attrs
    kconfig.additional_labels['osg-provisioner'] = 'wn'
    kconfig.app_name = 'osg-wn'
+   cconfig.app_name = 'osg-wn'
 
    if 'k8s' in fconfig:
       kconfig.parse(fconfig['k8s'])
    else:
       kconfig.parse(fconfig['DEFAULT'])
 
-   cconfig = provisioner_htcondor.ProvisionerHTCConfig(namespace)
    if 'htcondor' in fconfig:
       cconfig.parse(fconfig['htcondor'])
    else:
