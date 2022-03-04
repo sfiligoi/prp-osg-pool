@@ -29,6 +29,7 @@ echo "CONDOR_HOST=${CONDOR_HOST}" > /etc/condor/config.d/02_condor_host.config
 
 echo "[DEFAULT]" > /home/provisioner/pod.conf
 echo "condor_host=${CONDOR_HOST}" >> /home/provisioner/pod.conf
+echo "namespace=${K8S_NAMESPACE}" >> /home/provisioner/pod.conf
 
 trap 'echo signal received!; kill $(jobs -p); wait' SIGINT SIGTERM
 

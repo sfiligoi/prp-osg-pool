@@ -19,7 +19,15 @@ def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time
    fconfig = configparser.ConfigParser()
    fconfig.read(('pod.conf','osg_provisioner.conf'))
    kconfig = provisioner_k8s.ProvisionerK8SConfig(namespace)
-   kconfig.parse(fconfig['k8s'])
+   if 'k8s' in fconfig:
+      kconfig.parse(fconfig['k8s'])
+   else:
+      cconfig.parse(fconfig['DEFAULT'])
+   cconfig = provisioner_htcondor.ProvisionerHTCConfig(namespace)
+   if 'htcondor' in fconfig:
+      cconfig.parse(fconfig['htcondor'])
+   else:
+      cconfig.parse(fconfig['DEFAULT'])
 
    # we will distinguish this class by these attrs
    kconfig.additional_labels['osg-provisioner'] = 'wn'
@@ -37,8 +45,8 @@ def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time
 
    log_obj = provisioner_logging.ProvisionerFileLogging(log_fname, want_log_debug=True)
    # TBD: Strong security
-   schedd_obj = provisioner_htcondor.ProvisionerSchedd(namespace, {'.*':'.*'})
-   collector_obj = provisioner_htcondor.ProvisionerCollector(namespace, '.*')
+   schedd_obj = provisioner_htcondor.ProvisionerSchedd({'.*':'.*'}, cconfig)
+   collector_obj = provisioner_htcondor.ProvisionerCollector('.*', cconfig)
    k8s_obj = provisioner_k8s.ProvisionerK8S(kconfig)
    k8s_obj.authenticate()
 
