@@ -33,6 +33,10 @@ ADD provisioner_startup.sh /opt/provisioner/provisioner_startup.sh
 # CONDOR_HOST
 # K8S_NAMESPACE
 # CVMFS_MOUNTS
+
+#
+# Optional env variable
+# HTCONDOR_QUERY_INSECURE
 #
 
 CMD ["/opt/provisioner/provisioner_startup.sh"]
