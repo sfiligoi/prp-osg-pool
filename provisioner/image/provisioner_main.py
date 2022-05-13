@@ -48,14 +48,15 @@ def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time
 
    log_obj = provisioner_logging.ProvisionerFileLogging(log_fname, want_log_debug=True)
    # TBD: Strong security
-   schedd_obj = provisioner_htcondor.ProvisionerSchedd(log_obj, {'.*':'.*'}, cconfig)
+   schedd_whitelist=fconfig['htcondor'].get('schedd_whitelist_regexp','.*')
+   schedd_obj = provisioner_htcondor.ProvisionerSchedd(log_obj, {schedd_whitelist:'.*'}, cconfig)
    collector_obj = provisioner_htcondor.ProvisionerCollector(log_obj, '.*', cconfig)
    k8s_obj = provisioner_k8s.ProvisionerK8S(kconfig)
    k8s_obj.authenticate()
 
    el = event_loop.ProvisionerEventLoop(log_obj, schedd_obj, collector_obj, k8s_obj, max_pods_per_cluster)
    while True:
-      log_obj.log_debug("[Main] Iteration started")
+      log_obj.log_debug("[Main] Iteration started, schedd whitelist='%s'"%schedd_whitelist)
       try:
          el.one_iteration()
       except:
