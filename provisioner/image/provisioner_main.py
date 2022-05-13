@@ -48,8 +48,8 @@ def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time
 
    log_obj = provisioner_logging.ProvisionerFileLogging(log_fname, want_log_debug=True)
    # TBD: Strong security
-   schedd_obj = provisioner_htcondor.ProvisionerSchedd({'.*':'.*'}, cconfig)
-   collector_obj = provisioner_htcondor.ProvisionerCollector('.*', cconfig)
+   schedd_obj = provisioner_htcondor.ProvisionerSchedd(log_obj, {'.*':'.*'}, cconfig)
+   collector_obj = provisioner_htcondor.ProvisionerCollector(log_obj, '.*', cconfig)
    k8s_obj = provisioner_k8s.ProvisionerK8S(kconfig)
    k8s_obj.authenticate()
 
