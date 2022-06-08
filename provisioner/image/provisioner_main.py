@@ -31,10 +31,8 @@ def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time
    else:
       kconfig.parse(fconfig['DEFAULT'])
 
-   if 'htcondor' in fconfig:
-      cconfig.parse(fconfig['htcondor'])
-   else:
-      cconfig.parse(fconfig['DEFAULT'])
+   hfconfig = ('htcondor' in fconfig) ? fconfig['htcondor'] : fconfig['DEFAULT']
+   cconfig.parse(hfconfig)
 
    cvmfsenvs=[]
 
@@ -48,7 +46,7 @@ def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time
 
    log_obj = provisioner_logging.ProvisionerFileLogging(log_fname, want_log_debug=True)
    # TBD: Strong security
-   schedd_whitelist=fconfig['htcondor'].get('schedd_whitelist_regexp','.*')
+   schedd_whitelist=hfconfig.get('schedd_whitelist_regexp','.*')
    schedd_obj = provisioner_htcondor.ProvisionerSchedd(log_obj, {schedd_whitelist:'.*'}, cconfig)
    collector_obj = provisioner_htcondor.ProvisionerCollector(log_obj, '.*', cconfig)
    k8s_obj = provisioner_k8s.ProvisionerK8S(kconfig)
