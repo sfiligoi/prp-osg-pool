@@ -31,7 +31,7 @@ def main(log_fname, namespace, cvmfs_mounts, max_pods_per_cluster=20, sleep_time
    else:
       kconfig.parse(fconfig['DEFAULT'])
 
-   hfconfig = ('htcondor' in fconfig) ? fconfig['htcondor'] : fconfig['DEFAULT']
+   hfconfig = fconfig['htcondor'] if ('htcondor' in fconfig) else fconfig['DEFAULT']
    cconfig.parse(hfconfig)
 
    cvmfsenvs=[]
