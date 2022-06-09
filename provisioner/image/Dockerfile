@@ -22,7 +22,8 @@ RUN useradd provisioner && chown -R provisioner /opt/provisioner
 RUN su provisioner -c '/usr/bin/ln -s /opt/provisioner/prp-htcondor-portal/provisioner/python/prp_provisioner /home/provisioner/prp_provisioner'
 
 ADD provisioner_main.py /home/provisioner/provisioner_main.py
-RUN chown provisioner /home/provisioner/provisioner_main.py
+ADD provisioner_info.py /home/provisioner/provisioner_info.py
+RUN chown provisioner /home/provisioner/provisioner_main.py; chmod a+x /home/provisioner/provisioner_info.py; chown provisioner /home/provisioner/provisioner_info.py
 
 ADD setup_k8s_creds.sh /opt/provisioner/setup_k8s_creds.sh
 ADD setup_htcondor_creds.sh /opt/provisioner/setup_htcondor_creds.sh
