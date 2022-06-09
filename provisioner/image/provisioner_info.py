@@ -48,7 +48,9 @@ def main(namespace):
    all_clusters_set = set(schedd_clusters.keys())|set(k8s_clusters.keys())
    print("%-39s %9s %9s %9s %9s %9s"%("Cluster","Idle Jobs","Wait Pods","Run Pods","Failed P","Unknown P"))
    print("="*(39+1+9+1+9+1+9+1+9+1+9))
-   for ckey in all_clusters_set:
+   ckeys=list(all_clusters_set)
+   ckeys.sort()
+   for ckey in ckeys:
      sched_cnt=schedd_clusters[ckey].count_idle() if (ckey in schedd_clusters) else 0
      (unclaimed_cnt,claimed_cnt,failed_cnt,unknown_cnt) = k8s_clusters[ckey].count_states() if (ckey in k8s_clusters) else (0,0,0,0)
      print("%-39s %9i %9i %9i %9i %9i"%(ckey, sched_cnt,unclaimed_cnt,claimed_cnt,failed_cnt,unknown_cnt))
