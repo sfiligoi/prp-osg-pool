@@ -46,7 +46,7 @@ def main(namespace):
    el = event_loop.ProvisionerEventLoop(log_obj, schedd_obj, collector_obj, k8s_obj, 1)
    (schedd_clusters, k8s_clusters) = el.query_system()
    all_clusters_set = set(schedd_clusters.keys())|set(k8s_clusters.keys())
-   print("%-39s %9s %9s %9s %9s %9s"%("Cluster","Idle Jobs","Wait Pods","Run Pods","Failed P","Unknown P"))
+   print("%-39s %9s %9s %9s %9s %9s"%("Cluster (CPUs;MEM;DISK;;GPUs;;)","Idle Jobs","Wait Pods","Run Pods","Failed P","Unknown P"))
    print("="*(39+1+9+1+9+1+9+1+9+1+9))
    ckeys=list(all_clusters_set)
    ckeys.sort()
