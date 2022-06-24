@@ -46,14 +46,14 @@ def main(namespace):
    el = event_loop.ProvisionerEventLoop(log_obj, schedd_obj, collector_obj, k8s_obj, 1)
    (schedd_clusters, k8s_clusters) = el.query_system()
    all_clusters_set = set(schedd_clusters.keys())|set(k8s_clusters.keys())
-   print("%-39s %9s %9s %9s %9s %9s"%("Cluster (CPUs;MEM;DISK;;GPUs;;)","Idle Jobs","Wait Pods","Run Pods","Failed P","Unknown P"))
-   print("="*(39+1+9+1+9+1+9+1+9+1+9))
+   print("%-39s %9s %9s %9s %9s %9s %9s"%("Cluster (CPUs;MEM;DISK;;GPUs;;)","Idle Jobs","Wait Pods","Unmatched","Run Pods","Failed P","Unknown P"))
+   print("="*(39+1+9+1+9+1+9+1+9+1+9+1+9))
    ckeys=list(all_clusters_set)
    ckeys.sort()
    for ckey in ckeys:
      sched_cnt=schedd_clusters[ckey].count_idle() if (ckey in schedd_clusters) else 0
-     (unclaimed_cnt,claimed_cnt,failed_cnt,unknown_cnt) = k8s_clusters[ckey].count_states() if (ckey in k8s_clusters) else (0,0,0,0)
-     print("%-39s %9i %9i %9i %9i %9i"%(ckey, sched_cnt,unclaimed_cnt,claimed_cnt,failed_cnt,unknown_cnt))
+     (waiting_cnt,unmatched_cnt,claimed_cnt,failed_cnt,unknown_cnt) = k8s_clusters[ckey].count_states() if (ckey in k8s_clusters) else (0,0,0,0,0)
+     print("%-39s %9i %9i %9i %9i %9i %9i"%(ckey, sched_cnt,waiting_cnt,unmatched_cnt,claimed_cnt,failed_cnt,unknown_cnt))
 
 if __name__ == "__main__":
    # execute only if run as a script
