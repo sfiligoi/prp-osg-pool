@@ -50,8 +50,8 @@ def main(log_fname, namespace, cvmfs_mounts):
    k8s_obj = provisioner_k8s.ProvisionerK8S(kconfig)
    k8s_obj.authenticate()
 
-   max_pods_per_cluster = int(lfconfig.get('max_pods_per_cluster','20'))
-   max_submit_pods_per_cluster = int(lfconfig.get('max_submit_pods_per_cluster','1000'))
+   max_pods_per_cluster = int(kfconfig.get('max_pods_per_cluster','20'))
+   max_submit_pods_per_cluster = int(kfconfig.get('max_submit_pods_per_cluster','1000'))
    sleep_time = int(fconfig['DEFAULT'].get('sleep_time','120'))
 
    el = event_loop.ProvisionerEventLoop(log_obj, schedd_obj, collector_obj, k8s_obj, max_pods_per_cluster, max_submit_pods_per_cluster)
