@@ -43,7 +43,7 @@ def main(namespace):
    k8s_obj = provisioner_k8s.ProvisionerK8S(kconfig)
    k8s_obj.authenticate()
 
-   el = event_loop.ProvisionerEventLoop(log_obj, schedd_obj, collector_obj, k8s_obj, 1)
+   el = event_loop.ProvisionerEventLoop(log_obj, schedd_obj, collector_obj, k8s_obj, 1, 10000)
    (schedd_clusters, k8s_clusters) = el.query_system()
    all_clusters_set = set(schedd_clusters.keys())|set(k8s_clusters.keys())
    print("%-39s %9s %9s %9s %9s %9s %9s"%("Cluster (CPUs;MEM;DISK;;GPUs;;)","Idle Jobs","Wait Pods","Unmatched","Run Pods","Failed P","Unknown P"))
