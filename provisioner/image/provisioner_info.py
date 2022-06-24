@@ -53,7 +53,9 @@ def main(namespace):
    for ckey in ckeys:
      sched_cnt=schedd_clusters[ckey].count_idle() if (ckey in schedd_clusters) else 0
      (waiting_cnt,unmatched_cnt,claimed_cnt,failed_cnt,unknown_cnt) = k8s_clusters[ckey].count_states() if (ckey in k8s_clusters) else (0,0,0,0,0)
-     print("%-39s %9i %9i %9i %9i %9i %9i"%(ckey, sched_cnt,waiting_cnt,unmatched_cnt,claimed_cnt,failed_cnt,unknown_cnt))
+     if (sched_cnt+waiting_cnt+unmatched_cnt+claimed_cnt+failed_cnt+unknown_cnt)>0:
+       # do not report all zeros
+       print("%-39s %9i %9i %9i %9i %9i %9i"%(ckey, sched_cnt,waiting_cnt,unmatched_cnt,claimed_cnt,failed_cnt,unknown_cnt))
 
 if __name__ == "__main__":
    # execute only if run as a script
