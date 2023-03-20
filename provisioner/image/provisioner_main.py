@@ -32,12 +32,12 @@ def main(log_fname, namespace, cvmfs_mounts):
    hfconfig = fconfig['htcondor'] if ('htcondor' in fconfig) else fconfig['DEFAULT']
    cconfig.parse(hfconfig)
 
+   kconfig.base_pvc_volumes["cvmfs"] =  "#/cvmfs"
    cvmfsenvs=[]
 
    # we always need the osg-config and oasis
    for c in (['config-osg','oasis'] + cvmfs_mounts):
       ext='opensciencegrid.org' if c!='stash' else 'osgstorage.org'
-      kconfig.base_pvc_volumes["cvmfs-%s"%c] =  "/cvmfs/%s.%s"%(c,ext)
       cvmfsenvs.append( "%s.%s"%(c,ext) )
 
    kconfig.additional_envs['CVMFS_REPOS'] = ",".join(cvmfsenvs)
