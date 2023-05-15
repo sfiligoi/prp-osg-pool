@@ -1,4 +1,4 @@
-FROM sfiligoi/prp-portal-wn
+FROM sfiligoi/prp-portal-wn:osg_testing
 
 # needed by CVMFS checks
 RUN yum -y install attr && yum clean all
