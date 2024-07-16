@@ -3,9 +3,7 @@ FROM rockylinux:9
 # OSG RPMs
 RUN yum -y install https://repo.opensciencegrid.org/osg/23-main/osg-23-main-el9-release-latest.rpm && \
     yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
-    yum -y install less which \
-                   redhat-lsb-core && \
-    yum -y install python3-pip git && \
+    yum -y install python3-pip git less which && \
     yum -y install condor python3-condor && \
     yum clean all
 
