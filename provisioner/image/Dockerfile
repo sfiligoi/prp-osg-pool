@@ -1,7 +1,8 @@
 FROM rockylinux:9
 
 # dependency needed by OSG
-RUN dnf config-manager --set-enabled crb
+RUN dnf install 'dnf-command(config-manager)' && \
+    dnf config-manager --set-enabled crb
 
 # OSG RPMs
 RUN yum -y install https://repo.opensciencegrid.org/osg/23-main/osg-23-main-el9-release-latest.rpm && \
