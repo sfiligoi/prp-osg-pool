@@ -9,12 +9,15 @@ RUN dnf install -y 'dnf-command(config-manager)' && \
 RUN yum -y install https://repo.opensciencegrid.org/osg/23-main/osg-23-main-el9-release-latest.rpm && \
     yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
     yum -y install python3-pip git less which && \
-    yum -y install condor python3-condor && \
+    yum -y install osg-ca-certs condor python3-condor && \
     yum clean all
 
 
 RUN pip3 install kubernetes
 
+
+# Tell condor to use osg-ca-certs
+ADD 03_condor_sec.config /etc/condor/config.d/03_condor_sec.config
 
 # configure python packages
 RUN mkdir -p /opt/provisioner && cd /opt/provisioner && git clone https://github.com/sfiligoi/prp-htcondor-portal.git && cd prp-htcondor-portal && git checkout osg_pool_base
