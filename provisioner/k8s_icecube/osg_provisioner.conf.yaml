@@ -1,0 +1,29 @@
+apiVersion: v1
+data:
+  osg_provisioner.conf: |
+    [DEFAULT]
+    k8s_domain=nrp-nautilus.io
+    app_name=osg-direct
+    force_k8s_namespace_matching=no
+    additional_requirements=Group=?="IceCube"&&RequestGPUs=?=1
+
+    [htcondor]
+    schedd_whitelist_regexp=(sub-.\.icecube\.wisc\.edu)
+
+    [k8s]
+    k8s_image=sfiligoi/prp-osg-pool:wn-d2202
+    tolerations_list=nautilus.io/noceph,nautilus.io/chase-ci,nautilus.io/haosu,nautilus.io/suncave
+    node_affinity_dict=^nautilus.io/low-power:true,^nvidia.com/gpu.product:NVIDIA-A100-80GB-PCIe-MIG-1g.10gb
+    priority_class=opportunistic2
+    max_submit_pods_per_cluster=300
+    k8s_job_ttl=7200
+    use_large_limit=no
+    envs_dict=USE_SINGULARITY:npid,NVIDIA_SYMLINK:no,GLIDEIN_Site:SDSC-PRP
+    annotations_dict=container.apparmor.security.beta.kubernetes.io/htcondor:unconfined
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2022-03-15T23:17:47Z"
+  name: direct-provisioner-config
+  namespace: osg-icecube
+  resourceVersion: "6532052506"
+  uid: 0e1d9b72-7f55-4822-9a39-cd56a7b8fab2

@@ -1,0 +1,27 @@
+0) deploy service account
+kubectl create -n $NAMESPACE -f prp-htcondor-portal/provisioner/k8s/prp-htcondor-provisioner-account.yaml
+kubectl create -f cvmfs-nrao.yaml
+
+
+1) needs token in prp-wn-osgvo.token
+# used by both provisioner and WNs
+kubectl create secret generic prp-htcondor-wn-secret -n osg-nrao --from-file=prp-wn.token=prp-wn-nrao.token
+
+2) create config file
+kubectl create configmap nrao-provisioner-config -n osg-nrao --from-file=osg_provisioner.conf=osg_provisioner.conf
+
+kubectl create configmap nrao-glidein-config -n osg-nrao --from-file=70-nrao.config=70-nrao.config
+
+3) Launch yamls
+kubectl create -f pvc-provisioner-logs.yaml
+kubectl create -f provisioner-pod.yaml
+
+
+=== 24G version ===
+1) create config file
+kubectl create configmap nrao-provisioner-config-24 -n osg-nrao --from-file=osg_provisioner.conf=osg_provisioner-24.conf
+
+2) Launch yamls
+kubectl create -f pvc-provisioner-logs-24.yaml
+kubectl create -f provisioner-pod-24.yaml
+

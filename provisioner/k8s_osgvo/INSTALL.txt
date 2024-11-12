@@ -1,3 +1,10 @@
+0a) deploy service account
+kubectl create -n $NAMESPACE -f prp-htcondor-portal/provisioner/k8s/prp-htcondor-provisioner-account.yaml
+
+0b) deploy wn account
+kubectl create -n $NAMESPACE -f prp-htcondor-portal/provisioner/k8s/prp-htcondor-wn-account.yaml
+
+
 1) needs token in prp-wn-osgvo.token
 # used by both provisioner and WNs
 kubectl create secret generic prp-htcondor-wn-secret -n osg-opportunistic --from-file=prp-wn.token=prp-wn-osgvo.token
