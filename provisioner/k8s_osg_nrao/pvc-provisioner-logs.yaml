@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nrao-provisioner-log-pvc2
+  namespace: osg-nrao
+spec:
+  storageClassName: rook-cephfs-central
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi

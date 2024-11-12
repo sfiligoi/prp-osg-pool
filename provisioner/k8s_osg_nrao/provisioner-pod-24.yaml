@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    applicationId: nrp-provisioner-24
+    k8s-app: nrao-provisioner-24
+  name: nrao-provisioner-24
+  namespace: osg-nrao
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: nrao-provisioner-24
+  template:
+    metadata:
+      labels:
+        applicationId: nrp-provisioner-24
+        k8s-app: nrao-provisioner-24
+    spec:
+      containers:
+      - env:
+        - name: CONDOR_HOST
+          value: cm-1.ospool.osg-htc.org,cm-2.ospool.osg-htc.org
+        - name: K8S_NAMESPACE
+          value: osg-nrao
+        - name: CVMFS_MOUNTS
+          value: connect,stash,singularity
+        - name: HTCONDOR_QUERY_INSECURE
+          value: "yes"
+        image: sfiligoi/prp-osg-pool:provisioner-direct
+        imagePullPolicy: Always
+        name: provisioner
+        resources:
+          limits:
+            cpu: "1"
+            memory: 10Gi
+          requests:
+            cpu: 100m
+            memory: 1Gi
+        volumeMounts:
+        - mountPath: /etc/condor/tokens.d/prp-wn.token
+          name: configpasswd
+          readOnly: true
+          subPath: prp-wn.token
+        - mountPath: /home/provisioner/osg_provisioner.conf
+          name: kconf
+          subPath: osg_provisioner.conf
+        - mountPath: /var/log/provisioner
+          name: log-pvc
+      restartPolicy: Always
+      serviceAccount: prp-htcondor-provisioner
+      serviceAccountName: prp-htcondor-provisioner
+      volumes:
+      - name: configpasswd
+        secret:
+          defaultMode: 256
+          items:
+          - key: prp-wn.token
+            path: prp-wn.token
+          secretName: prp-htcondor-wn-secret
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: osg_provisioner.conf
+            path: osg_provisioner.conf
+          name: nrao-provisioner-config-24
+        name: kconf
+      - name: log-pvc
+        persistentVolumeClaim:
+          claimName: nrao-provisioner-log-pvc-24
+
